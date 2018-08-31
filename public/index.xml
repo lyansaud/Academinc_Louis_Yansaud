@@ -11,6 +11,122 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Twitter Sentiment Analysis</title>
+      <link>/post/twitter_sentiment_analysis/</link>
+      <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/twitter_sentiment_analysis/</guid>
+      <description>&lt;script src=&#34;/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/d3/d3.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/d3wordcloud/d3.layout.cloud.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/d3wordcloud-binding/d3wordcloud.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/plotly-binding/plotly.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/typedarray/typedarray.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/crosstalk/css/crosstalk.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/crosstalk/js/crosstalk.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/plotly-main/plotly-latest.min.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;From my previous post, I first performed extensive data cleaning in order to analyze the sentiment of each individual cryptocurrency. Here is the result of my analysis.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(twitteR)
+library(dplyr)
+library(tm)
+library(wordcloud)
+library(tidytext)
+library(tidyverse)
+library(sqldf)
+library(ggplot2)
+library(ggthemes)
+library(data.table)
+library(gridExtra)
+
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;wordclouds-and-d3wordclouds&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;WordClouds and D3WordClouds&lt;/h5&gt;
+&lt;p&gt;Bitcoin&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(d3wordcloud)
+big_data_clean_2 &amp;lt;- read.csv(&amp;quot;big_data_clean_2.csv&amp;quot;)
+
+bitcoin_words &amp;lt;-  big_data_clean_2 %&amp;gt;%
+            filter(coin == &amp;quot;bitcoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count))
+
+set.seed(123)
+wordcloud(words = bitcoin_words$words, freq = bitcoin_words$words_count, min.freq = 10,
+          max.words=100, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(10, &amp;quot;Dark2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/twitter_sentiment_analysis_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d3wordcloud(bitcoin_words$words, bitcoin_words$words_count,  padding = 5,  width = &amp;quot;100%&amp;quot;, height = &amp;quot;500px&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;htmlwidget-1&#34; style=&#34;width:100%;height:500px;&#34; class=&#34;d3wordcloud html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;data&#34;:{&#34;text&#34;:[&#34;coin&#34;,&#34;airdrop&#34;,&#34;mwt&#34;,&#34;live&#34;,&#34;wallet&#34;,&#34;airdropping&#34;,&#34;ethereum&#34;,&#34;first&#34;,&#34;participants&#34;,&#34;buy&#34;,&#34;cash&#34;,&#34;finance&#34;,&#34;free&#34;,&#34;litecoin&#34;,&#34;midas&#34;,&#34;mining&#34;,&#34;now&#34;,&#34;yahoo&#34;,&#34;0xc73404e3e8961b83a63ef8ec40f41a2b15a9d0fd&#34;,&#34;market&#34;,&#34;platform&#34;,&#34;proc&#34;,&#34;selfdrop&#34;,&#34;send&#34;,&#34;token&#34;,&#34;trading&#34;,&#34;will&#34;,&#34;001&#34;,&#34;1000&#34;,&#34;500&#34;,&#34;africa&#34;,&#34;back&#34;,&#34;blockchains&#34;,&#34;censorship&#34;,&#34;consequences&#34;,&#34;corporate&#34;,&#34;danger&#34;,&#34;earn&#34;,&#34;ezscott48&#34;,&#34;going&#34;,&#34;integrates&#34;,&#34;money&#34;,&#34;new&#34;,&#34;regulating&#34;,&#34;see&#34;,&#34;tch&#34;,&#34;time&#34;,&#34;today&#34;,&#34;traditional&#34;,&#34;unintended&#34;,&#34;valued&#34;,&#34;week&#34;,&#34;worth$10&#34;,&#34;$30&#34;,&#34;$7000&#34;,&#34;11000&#34;,&#34;3500&#34;,&#34;adoption&#34;,&#34;also&#34;,&#34;app&#34;,&#34;ark&#34;,&#34;asset&#34;,&#34;beat&#34;,&#34;big&#34;,&#34;blockchainbased&#34;,&#34;bulls&#34;,&#34;can&#34;,&#34;cointelegraph&#34;,&#34;cornucopia&#34;,&#34;cpollo&#34;,&#34;device&#34;,&#34;entrepreneur&#34;,&#34;everywhere&#34;,&#34;evolution&#34;,&#34;excited&#34;,&#34;faucet&#34;,&#34;featured&#34;,&#34;fintech&#34;,&#34;followback&#34;,&#34;forex&#34;,&#34;four&#34;,&#34;future&#34;,&#34;good&#34;,&#34;great&#34;,&#34;guys&#34;,&#34;holds&#34;,&#34;huge&#34;,&#34;ico&#34;,&#34;interested&#34;,&#34;investment&#34;,&#34;japan&#34;,&#34;join&#34;,&#34;jump&#34;,&#34;know&#34;,&#34;legal&#34;,&#34;less&#34;,&#34;looking&#34;,&#34;mine&#34;,&#34;mobile&#34;,&#34;module&#34;,&#34;moduleproject&#34;,&#34;names&#34;,&#34;next&#34;,&#34;offering&#34;,&#34;one&#34;,&#34;patent&#34;,&#34;pay&#34;,&#34;payment&#34;,&#34;people&#34;,&#34;pips&#34;,&#34;presale&#34;,&#34;procurrency&#34;,&#34;project&#34;,&#34;really&#34;,&#34;reddit&#34;,&#34;scalabilit&#34;,&#34;sign&#34;,&#34;square&#34;,&#34;storage&#34;,&#34;tenfoldprotocol&#34;,&#34;thailand&#34;,&#34;trade&#34;,&#34;using&#34;,&#34;via&#34;,&#34;want&#34;,&#34;war&#34;,&#34;ways&#34;,&#34;youtube&#34;,&#34;blockchain&#34;,&#34;news&#34;,&#34;get&#34;,&#34;$100&#34;,&#34;$100k&#34;,&#34;$20k&#34;,&#34;$30to&#34;,&#34;$351000&#34;,&#34;$400&#34;,&#34;$ake&#34;,&#34;$bigg&#34;,&#34;$bloc&#34;,&#34;$blok&#34;,&#34;100&#34;,&#34;101&#34;,&#34;11000proc&#34;,&#34;130284&#34;,&#34;168&#34;,&#34;1retweet&#34;,&#34;2017&#34;,&#34;2018&#34;,&#34;2follow&#34;,&#34;3000&#34;,&#34;3500proc&#34;,&#34;35c3&#34;,&#34;5000&#34;,&#34;accept&#34;,&#34;accepted&#34;,&#34;accepts&#34;,&#34;across&#34;,&#34;add&#34;,&#34;address&#34;,&#34;age&#34;,&#34;aircoins&#34;,&#34;airdrops&#34;,&#34;alternative&#34;,&#34;amazing&#34;,&#34;analysis&#34;,&#34;another&#34;,&#34;application&#34;,&#34;aqua&#34;,&#34;aqualite&#34;,&#34;architect&#34;,&#34;aset&#34;,&#34;asian&#34;,&#34;asked&#34;,&#34;askingforafriend&#34;,&#34;assets&#34;,&#34;augmented&#34;,&#34;average&#34;,&#34;awesome&#34;,&#34;bank&#34;,&#34;basic&#34;,&#34;basics&#34;,&#34;basis&#34;,&#34;bday&#34;,&#34;begins&#34;,&#34;bestdressed&#34;,&#34;beta&#34;,&#34;betta&#34;,&#34;better$$$&#34;,&#34;binary&#34;,&#34;binaryoptions&#34;,&#34;bitads&#34;,&#34;bitches&#34;,&#34;bitcofarm&#34;,&#34;bitcoingood&#34;,&#34;biweekly&#34;,&#34;boost&#34;,&#34;boring&#34;,&#34;bot&#34;,&#34;bottomfishing&#34;,&#34;bou&#34;,&#34;bounty&#34;,&#34;bril&#34;,&#34;btcfxea&#34;,&#34;build&#34;,&#34;bullish&#34;,&#34;bullrun&#34;,&#34;bullyesq&#34;,&#34;busted&#34;,&#34;calvinayre&#34;,&#34;card&#34;,&#34;cards&#34;,&#34;central&#34;,&#34;ceo&#34;,&#34;cha&#34;,&#34;channel&#34;,&#34;chaos&#34;,&#34;charges&#34;,&#34;chartpick&#34;,&#34;chief&#34;,&#34;claim&#34;,&#34;clean&#34;,&#34;click&#34;,&#34;close&#34;,&#34;closed&#34;,&#34;closing&#34;,&#34;cloud&#34;,&#34;cmegroup&#34;,&#34;cnbc&#34;,&#34;coal&#34;,&#34;coinme&#34;,&#34;combines&#34;,&#34;come&#34;,&#34;comes&#34;,&#34;communication&#34;,&#34;congress&#34;,&#34;contest&#34;,&#34;continues&#34;,&#34;corginomics&#34;,&#34;cornucopiaico&#34;,&#34;countries&#34;,&#34;countrys&#34;,&#34;cracked&#34;,&#34;crowdfunding&#34;,&#34;cryptoassets&#34;,&#34;cryptocean&#34;,&#34;cryptocryptocurrency&#34;,&#34;cryptocurreency&#34;,&#34;cryptoisthefuture&#34;,&#34;cryptokiitten&#34;,&#34;cryptolife&#34;,&#34;cryptonews&#34;,&#34;cryptotonight&#34;,&#34;cup&#34;,&#34;currency&#34;,&#34;current&#34;,&#34;daily&#34;,&#34;dangerous&#34;,&#34;dealer&#34;,&#34;dealing&#34;,&#34;decentralized&#34;,&#34;decide&#34;,&#34;deck&#34;,&#34;defenseintel&#34;,&#34;develop&#34;,&#34;dictated&#34;,&#34;digest&#34;,&#34;distributes&#34;,&#34;dlt&#34;,&#34;dodiis17&#34;,&#34;dodiisww&#34;,&#34;dogshit&#34;,&#34;domain&#34;,&#34;dont&#34;,&#34;draintheswamp&#34;,&#34;drew&#34;,&#34;drive&#34;,&#34;drop&#34;,&#34;eagerly&#34;,&#34;economics&#34;,&#34;economy&#34;,&#34;ecosystem&#34;,&#34;edgewallet&#34;,&#34;educated&#34;,&#34;effect&#34;,&#34;employed&#34;,&#34;enabling&#34;,&#34;endless&#34;,&#34;energy&#34;,&#34;enjoy&#34;,&#34;entirely&#34;,&#34;era&#34;,&#34;especially&#34;,&#34;eur&#34;,&#34;ever&#34;,&#34;every&#34;,&#34;expensive&#34;,&#34;explained&#34;,&#34;exworkers&#34;,&#34;facebook&#34;,&#34;facing&#34;,&#34;facts&#34;,&#34;family&#34;,&#34;farm&#34;,&#34;fast&#34;,&#34;feature&#34;,&#34;federal&#34;,&#34;fiat&#34;,&#34;finally&#34;,&#34;find&#34;,&#34;followme&#34;,&#34;forextrade&#34;,&#34;forget&#34;,&#34;forums&#34;,&#34;franchise&#34;,&#34;freecoins&#34;,&#34;friday&#34;,&#34;friends&#34;,&#34;fuck&#34;,&#34;funding&#34;,&#34;futures&#34;,&#34;gbpusd&#34;,&#34;getting&#34;,&#34;getvthqt&#34;,&#34;giveaway&#34;,&#34;gold&#34;,&#34;golden&#34;,&#34;gonna&#34;,&#34;got&#34;,&#34;grand&#34;,&#34;grassroots&#34;,&#34;grave&#34;,&#34;gregorymckenna&#34;,&#34;grown&#34;,&#34;gtgt&#34;,&#34;guide&#34;,&#34;hang&#34;,&#34;hardware&#34;,&#34;havent&#34;,&#34;hearts&#34;,&#34;help&#34;,&#34;holy&#34;,&#34;httpstco0iaeolmlth&#34;,&#34;httpstco0vibckuxyu&#34;,&#34;httpstco0zbuo6p7nh&#34;,&#34;httpstco1mbuaj77hn&#34;,&#34;httpstco1xzfzzeegt&#34;,&#34;httpstco2wvnzgysw9&#34;,&#34;httpstco3di5u2zcl5&#34;,&#34;httpstco3tynqwrvzo&#34;,&#34;httpstco4cmzkgjf9k&#34;,&#34;httpstco4unrjjj1sj&#34;,&#34;httpstco5ao0peefyv&#34;,&#34;httpstco5lddyfky16&#34;,&#34;httpstco5zswlr9cew&#34;,&#34;httpstco64qbuzuygd&#34;,&#34;httpstco6hlsxb0kz4&#34;,&#34;httpstco6l4v4w179a&#34;,&#34;httpstco6puimtrkbd&#34;,&#34;httpstco7hyrtguh6e&#34;,&#34;httpstco7vbdrwhzcx&#34;,&#34;httpstco9agzxapztg&#34;,&#34;httpstco9rnowwbpkl&#34;,&#34;httpstco9tqm76edlg&#34;,&#34;httpstco9v3oqqhd24&#34;,&#34;httpstcoa78ed7h5tk&#34;,&#34;httpstcoamptdzc3zv&#34;,&#34;httpstcocaomjwby7z&#34;,&#34;httpstcocejneye4pw&#34;,&#34;httpstcocgqhwus6lo&#34;,&#34;httpstcocjixmjvpiz&#34;,&#34;httpstcod5dloqlbhk&#34;,&#34;httpstcod9nasd68kc&#34;,&#34;httpstcode7q3z8zrh&#34;,&#34;httpstcodmkqskxlhe&#34;,&#34;httpstcodnllcef1hh&#34;,&#34;httpstcodx2smitbrq&#34;,&#34;httpstcoemeihfjivs&#34;,&#34;httpstcoepmuhcz396&#34;,&#34;httpstcoeqgpk6vvo0&#34;,&#34;httpstcof2svfj9p6e&#34;,&#34;httpstcof5kcjmgdjk&#34;,&#34;httpstcof9y7bewhrf&#34;,&#34;httpstcofraj05jvdz&#34;,&#34;httpstcogxvxrqs1yq&#34;,&#34;httpstcohfngkubwcg&#34;,&#34;httpstcohv3wzj337t&#34;,&#34;httpstcoiln8acxzho&#34;,&#34;httpstcoilsbc8qax3&#34;,&#34;httpstcoiptsrswhlf&#34;,&#34;httpstcoipwso37ajd&#34;,&#34;httpstcoiqmsbz9pdr&#34;,&#34;httpstcoiqsxcr9kkf&#34;,&#34;httpstcoirunvrpb02&#34;,&#34;httpstcoivnsoaq1e7&#34;,&#34;httpstcoiwkqsc0xsj&#34;,&#34;httpstcojhafxzqbav&#34;,&#34;httpstcojn7pmkje4m&#34;,&#34;httpstcojzjpsbqpgp&#34;,&#34;httpstcokzgcciajfs&#34;,&#34;httpstcol8jfqeplbx&#34;,&#34;httpstcolhi81dz2hu&#34;,&#34;httpstcolirsgcts5e&#34;,&#34;httpstcolrgcuqnfgp&#34;,&#34;httpstcomb8caqo3m5&#34;,&#34;httpstcomczvdtdqqy&#34;,&#34;httpstcomhk9mwmhat&#34;,&#34;httpstcomm2w7bljne&#34;,&#34;httpstcomodezzff8f&#34;,&#34;httpstcomqzsc2ugys&#34;,&#34;httpstcomr0eg4lmod&#34;,&#34;httpstcomw5pdtrygp&#34;,&#34;httpstcon04ceg38lz&#34;,&#34;httpstconlq2ki1tqm&#34;,&#34;httpstcontqofgfpsu&#34;,&#34;httpstcoohycd2ngae&#34;,&#34;httpstcooqafqtj1r2&#34;,&#34;httpstcootvppjcfw9&#34;,&#34;httpstcopbld2fqnpt&#34;,&#34;httpstcopgadtx3bx0&#34;,&#34;httpstcopktjwhnca5&#34;,&#34;httpstcoqmr7poezai&#34;,&#34;httpstcoqw8kaskffj&#34;,&#34;httpstcoqy6cmhg828&#34;,&#34;httpstcoqzpiwbvmac&#34;,&#34;httpstcorxqnq1urna&#34;,&#34;httpstcorypuber3cs&#34;,&#34;httpstcos0kpgxfqsl&#34;,&#34;httpstcososewrnbw6&#34;,&#34;httpstcosrhyg2wij7&#34;,&#34;httpstcosvuxnigww5&#34;,&#34;httpstcosz0im9dwur&#34;,&#34;httpstcot45jrayuix&#34;,&#34;httpstcotadhsc6jkb&#34;,&#34;httpstcotcoauiptdy&#34;,&#34;httpstcotmob8wjver&#34;,&#34;httpstcotsmjgovlya&#34;,&#34;httpstcou5zlg3zz5p&#34;,&#34;httpstcouifeqs80ba&#34;,&#34;httpstcoul0fmcx78e&#34;,&#34;httpstcoumdgwtfxtp&#34;,&#34;httpstcoupow9kvey8&#34;,&#34;httpstcouzt5gue9wl&#34;,&#34;httpstcovdno18c8zc&#34;,&#34;httpstcovimjoszqnu&#34;,&#34;httpstcovthobvguit&#34;,&#34;httpstcowfpkkckwn6&#34;,&#34;httpstcowh5ijgz9mz&#34;,&#34;httpstcowlugtwuw7o&#34;,&#34;httpstcoxfyvq7idtr&#34;,&#34;httpstcoxs42fhc2b1&#34;,&#34;httpstcoxyzmnbc8he&#34;,&#34;httpstcoybxd3dfy7t&#34;,&#34;httpstcoyjzxkoli1k&#34;,&#34;httpstcoz12xi6pa2ss&#34;,&#34;httpstcozkir04iqm9&#34;,&#34;httpstcozujjgzb0nc&#34;,&#34;httpstcozxumklka0c&#34;,&#34;httpstcozyeomwlbfs&#34;,&#34;httpstcozynfgsm1cl&#34;,&#34;hurt&#34;,&#34;ilovebitcoin&#34;,&#34;incorporate&#34;,&#34;india&#34;,&#34;industry&#34;,&#34;institutional&#34;,&#34;interest&#34;,&#34;intuittrading&#34;,&#34;investing&#34;,&#34;investors&#34;,&#34;issues&#34;,&#34;jesus&#34;,&#34;keep&#34;,&#34;king&#34;,&#34;korea&#34;,&#34;larceny&#34;,&#34;latte&#34;,&#34;launching&#34;,&#34;learn&#34;,&#34;ledger&#34;,&#34;lets&#34;,&#34;lighning&#34;,&#34;likely&#34;,&#34;link&#34;,&#34;loan&#34;,&#34;lol&#34;,&#34;lots&#34;,&#34;love&#34;,&#34;ltc&#34;,&#34;machinelearning&#34;,&#34;maga&#34;,&#34;make&#34;,&#34;making&#34;,&#34;malta&#34;,&#34;may&#34;,&#34;meet&#34;,&#34;might&#34;,&#34;million&#34;,&#34;mimblewimble&#34;,&#34;mira&#34;,&#34;misconceptions&#34;,&#34;missing&#34;,&#34;mission&#34;,&#34;mobilego&#34;,&#34;montana&#34;,&#34;monthly&#34;,&#34;moon&#34;,&#34;mooncashfaucet&#34;,&#34;movement&#34;,&#34;mumbai&#34;,&#34;need&#34;,&#34;needs&#34;,&#34;netherlands&#34;,&#34;network&#34;,&#34;never&#34;,&#34;noon&#34;,&#34;oct31&#34;,&#34;office&#34;,&#34;officials&#34;,&#34;open&#34;,&#34;opinion&#34;,&#34;order&#34;,&#34;overtak&#34;,&#34;pacific&#34;,&#34;part&#34;,&#34;payout&#34;,&#34;petro&#34;,&#34;physical&#34;,&#34;pinch&#34;,&#34;planning&#34;,&#34;plant&#34;,&#34;play&#34;,&#34;polny&#34;,&#34;positive&#34;,&#34;possibilities&#34;,&#34;pow&#34;,&#34;powered&#34;,&#34;practical&#34;,&#34;pro&#34;,&#34;projects&#34;,&#34;proof&#34;,&#34;provides&#34;,&#34;ptc&#34;,&#34;pumpkin&#34;,&#34;purchase&#34;,&#34;qampa&#34;,&#34;qanon&#34;,&#34;quick&#34;,&#34;raspberrypi&#34;,&#34;reach&#34;,&#34;reactions&#34;,&#34;read&#34;,&#34;real&#34;,&#34;reality&#34;,&#34;record&#34;,&#34;red&#34;,&#34;redwave&#34;,&#34;referral&#34;,&#34;registration&#34;,&#34;researching&#34;,&#34;reserve&#34;,&#34;revoultion&#34;,&#34;ridiculous&#34;,&#34;riding&#34;,&#34;ripple&#34;,&#34;rises&#34;,&#34;road&#34;,&#34;rosecrypto&#34;,&#34;satoshilite&#34;,&#34;says&#34;,&#34;scheme&#34;,&#34;scholarship&#34;,&#34;season&#34;,&#34;seasons&#34;,&#34;secure&#34;,&#34;security&#34;,&#34;seen&#34;,&#34;selling&#34;,&#34;senator&#34;,&#34;september&#34;,&#34;services&#34;,&#34;settled&#34;,&#34;silver&#34;,&#34;since&#34;,&#34;small&#34;,&#34;solutions&#34;,&#34;soon&#34;,&#34;special&#34;,&#34;spice&#34;,&#34;splitting&#34;,&#34;springleap&#34;,&#34;start&#34;,&#34;started&#34;,&#34;startup&#34;,&#34;stay&#34;,&#34;stec&#34;,&#34;steemit&#34;,&#34;stocks&#34;,&#34;stores&#34;,&#34;strategy&#34;,&#34;street&#34;,&#34;students&#34;,&#34;suburb&#34;,&#34;suc&#34;,&#34;suggesting&#34;,&#34;swarm&#34;,&#34;syste&#34;,&#34;taiwan&#34;,&#34;talk&#34;,&#34;talking&#34;,&#34;tangible&#34;,&#34;tax&#34;,&#34;telling&#34;,&#34;testing&#34;,&#34;tether&#34;,&#34;thank&#34;,&#34;theory&#34;,&#34;thing&#34;,&#34;think&#34;,&#34;tippr&#34;,&#34;todays&#34;,&#34;total&#34;,&#34;trader&#34;,&#34;traffic&#34;,&#34;trezor&#34;,&#34;true&#34;,&#34;truly&#34;,&#34;trump&#34;,&#34;trump2020&#34;,&#34;tweet&#34;,&#34;twice&#34;,&#34;underestimate&#34;,&#34;unhappy&#34;,&#34;unit&#34;,&#34;university&#34;,&#34;unnecessary&#34;,&#34;untested&#34;,&#34;unveils&#34;,&#34;update&#34;,&#34;uptoken&#34;,&#34;usdt&#34;,&#34;use&#34;,&#34;users&#34;,&#34;vault&#34;,&#34;venezuelan&#34;,&#34;verge&#34;,&#34;video&#34;,&#34;views&#34;,&#34;virtual&#34;,&#34;visit&#34;,&#34;vote&#34;,&#34;wait&#34;,&#34;wall&#34;,&#34;warning&#34;,&#34;wars&#34;,&#34;watching&#34;,&#34;wave&#34;,&#34;whats&#34;,&#34;whole&#34;,&#34;win&#34;,&#34;wins&#34;,&#34;wolf&#34;,&#34;womenofcrypto&#34;,&#34;world&#34;,&#34;worldwide&#34;,&#34;worries&#34;,&#34;worth&#34;,&#34;wow&#34;,&#34;xbt&#34;,&#34;yahoofinance&#34;,&#34;yall&#34;,&#34;year&#34;,&#34;yet&#34;],&#34;freq&#34;:[11,10,10,9,9,8,8,8,8,7,7,7,7,7,7,7,7,7,6,6,6,6,6,6,6,6,6,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],&#34;size&#34;:[11,10,10,9,9,8,8,8,8,7,7,7,7,7,7,7,7,7,6,6,6,6,6,6,6,6,6,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},&#34;pars&#34;:{&#34;font&#34;:&#34;Open Sans&#34;,&#34;padding&#34;:5,&#34;rotmin&#34;:-30,&#34;rotmax&#34;:30,&#34;tooltip&#34;:false,&#34;rangesizefont&#34;:[10,90],&#34;sizescale&#34;:&#34;linear&#34;,&#34;colorscale&#34;:&#34;linear&#34;,&#34;spiral&#34;:&#34;archimedean&#34;,&#34;colors&#34;:null,&#34;every_word_has_own_color&#34;:false,&#34;missing_colors&#34;:true,&#34;label&#34;:null}},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;p&gt;Ethereum&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ethereum_words &amp;lt;-  big_data_clean_2 %&amp;gt;%
+            filter(coin == &amp;quot;ethereum&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count))
+
+set.seed(123)
+wordcloud(words = ethereum_words$words, freq = ethereum_words$words_count, min.freq = 10,
+          max.words=100, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(10, &amp;quot;Dark2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/twitter_sentiment_analysis_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Litecoin&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;litecoin_words &amp;lt;-  big_data_clean_2 %&amp;gt;%
+            filter(coin == &amp;quot;litecoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count))
+
+set.seed(123)
+wordcloud(words = litecoin_words$words, freq = litecoin_words$words_count, min.freq = 10,
+          max.words=100, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(10, &amp;quot;Dark2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/twitter_sentiment_analysis_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;sentiment-analysis&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;Sentiment Analysis&lt;/h5&gt;
+&lt;p&gt;Bitcoin&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data_crypto_sentiment &amp;lt;- read.csv(&amp;quot;data_crypto_sentiment.csv&amp;quot;)
+
+plotly::ggplotly(data_crypto_sentiment %&amp;gt;%
+  filter(coin == &amp;quot;bitcoin&amp;quot; &amp;amp; !is.na(sentiment)) %&amp;gt;%
+  group_by(sentiment) %&amp;gt;%
+  summarize(count = n()) %&amp;gt;%
+  arrange(desc(count)) %&amp;gt;%
+  ggplot(aes( x = reorder(as.character(sentiment), count), y = count))+
+  geom_bar(stat = &amp;#39;identity&amp;#39;, fill = &amp;quot;#4271AE&amp;quot;)+
+  coord_flip()+
+  labs(title=&amp;#39;Bitcoin Sentiments&amp;#39;, x=&amp;#39;Sentiments&amp;#39;,y=&amp;#39;Sentiment Count&amp;#39;)+
+  theme_economist())&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;htmlwidget-2&#34; style=&#34;width:672px;height:480px;&#34; class=&#34;plotly html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-2&#34;&gt;{&#34;x&#34;:{&#34;data&#34;:[{&#34;orientation&#34;:&#34;h&#34;,&#34;width&#34;:[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999],&#34;base&#34;:[0,0,0,0,0,0,0,0,0,0,0,0,0,0],&#34;x&#34;:[0,1,3,6,7,8,11,11,13,16,21,25,56,82],&#34;y&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;text&#34;:[&#34;reorder(as.character(sentiment), count): superfluous&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): constraining&lt;br /&gt;count:  1&#34;,&#34;reorder(as.character(sentiment), count): litigious&lt;br /&gt;count:  3&#34;,&#34;reorder(as.character(sentiment), count): uncertainty&lt;br /&gt;count:  6&#34;,&#34;reorder(as.character(sentiment), count): disgust&lt;br /&gt;count:  7&#34;,&#34;reorder(as.character(sentiment), count): surprise&lt;br /&gt;count:  8&#34;,&#34;reorder(as.character(sentiment), count): anger&lt;br /&gt;count: 11&#34;,&#34;reorder(as.character(sentiment), count): sadness&lt;br /&gt;count: 11&#34;,&#34;reorder(as.character(sentiment), count): fear&lt;br /&gt;count: 13&#34;,&#34;reorder(as.character(sentiment), count): joy&lt;br /&gt;count: 16&#34;,&#34;reorder(as.character(sentiment), count): anticipation&lt;br /&gt;count: 21&#34;,&#34;reorder(as.character(sentiment), count): trust&lt;br /&gt;count: 25&#34;,&#34;reorder(as.character(sentiment), count): negative&lt;br /&gt;count: 56&#34;,&#34;reorder(as.character(sentiment), count): positive&lt;br /&gt;count: 82&#34;],&#34;type&#34;:&#34;bar&#34;,&#34;marker&#34;:{&#34;autocolorscale&#34;:false,&#34;color&#34;:&#34;rgba(66,113,174,1)&#34;,&#34;line&#34;:{&#34;width&#34;:1.88976377952756,&#34;color&#34;:&#34;transparent&#34;}},&#34;showlegend&#34;:false,&#34;xaxis&#34;:&#34;x&#34;,&#34;yaxis&#34;:&#34;y&#34;,&#34;hoverinfo&#34;:&#34;text&#34;,&#34;frame&#34;:null}],&#34;layout&#34;:{&#34;margin&#34;:{&#34;t&#34;:51.8655043586551,&#34;r&#34;:13.2835201328352,&#34;b&#34;:35.8655043586551,&#34;l&#34;:99.626400996264},&#34;plot_bgcolor&#34;:&#34;transparent&#34;,&#34;paper_bgcolor&#34;:&#34;rgba(213,228,235,1)&#34;,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;title&#34;:&#34;&lt;b&gt; Bitcoin Sentiments &lt;\/b&gt;&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:19.9252801992528},&#34;xaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[-4.1,86.1],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;0&#34;,&#34;20&#34;,&#34;40&#34;,&#34;60&#34;,&#34;80&#34;],&#34;tickvals&#34;:[0,20,40,60,80],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;0&#34;,&#34;20&#34;,&#34;40&#34;,&#34;60&#34;,&#34;80&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;outside&#34;,&#34;tickcolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0.603796369674327,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:true,&#34;linecolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;linewidth&#34;:0.483037095739462,&#34;showgrid&#34;:false,&#34;gridcolor&#34;:null,&#34;gridwidth&#34;:0,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;y&#34;,&#34;title&#34;:&#34;Sentiment Count&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;yaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[0.4,14.6],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;superfluous&#34;,&#34;constraining&#34;,&#34;litigious&#34;,&#34;uncertainty&#34;,&#34;disgust&#34;,&#34;surprise&#34;,&#34;anger&#34;,&#34;sadness&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;anticipation&#34;,&#34;trust&#34;,&#34;negative&#34;,&#34;positive&#34;],&#34;tickvals&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;superfluous&#34;,&#34;constraining&#34;,&#34;litigious&#34;,&#34;uncertainty&#34;,&#34;disgust&#34;,&#34;surprise&#34;,&#34;anger&#34;,&#34;sadness&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;anticipation&#34;,&#34;trust&#34;,&#34;negative&#34;,&#34;positive&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;&#34;,&#34;tickcolor&#34;:null,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:false,&#34;linecolor&#34;:null,&#34;linewidth&#34;:0,&#34;showgrid&#34;:true,&#34;gridcolor&#34;:&#34;rgba(255,255,255,1)&#34;,&#34;gridwidth&#34;:1.05664364693007,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;x&#34;,&#34;title&#34;:&#34;Sentiments&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;shapes&#34;:[{&#34;type&#34;:&#34;rect&#34;,&#34;fillcolor&#34;:null,&#34;line&#34;:{&#34;color&#34;:null,&#34;width&#34;:0,&#34;linetype&#34;:[]},&#34;yref&#34;:&#34;paper&#34;,&#34;xref&#34;:&#34;paper&#34;,&#34;x0&#34;:0,&#34;x1&#34;:1,&#34;y0&#34;:0,&#34;y1&#34;:1}],&#34;showlegend&#34;:false,&#34;legend&#34;:{&#34;bgcolor&#34;:&#34;transparent&#34;,&#34;bordercolor&#34;:&#34;transparent&#34;,&#34;borderwidth&#34;:1.71796707229778,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:16.604400166044}},&#34;hovermode&#34;:&#34;closest&#34;,&#34;barmode&#34;:&#34;relative&#34;},&#34;config&#34;:{&#34;doubleClick&#34;:&#34;reset&#34;,&#34;modeBarButtonsToAdd&#34;:[{&#34;name&#34;:&#34;Collaborate&#34;,&#34;icon&#34;:{&#34;width&#34;:1000,&#34;ascent&#34;:500,&#34;descent&#34;:-50,&#34;path&#34;:&#34;M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z&#34;},&#34;click&#34;:&#34;function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == &#39;?viewer_pane=1&#39;) {\n          alert(&#39;To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;);\n        } else {\n          window.open(&#39;https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;, &#39;_blank&#39;);\n        }\n      }&#34;}],&#34;cloud&#34;:false},&#34;source&#34;:&#34;A&#34;,&#34;attrs&#34;:{&#34;1b013f187089&#34;:{&#34;x&#34;:{},&#34;y&#34;:{},&#34;type&#34;:&#34;bar&#34;}},&#34;cur_data&#34;:&#34;1b013f187089&#34;,&#34;visdat&#34;:{&#34;1b013f187089&#34;:[&#34;function (y) &#34;,&#34;x&#34;]},&#34;highlight&#34;:{&#34;on&#34;:&#34;plotly_click&#34;,&#34;persistent&#34;:false,&#34;dynamic&#34;:false,&#34;selectize&#34;:false,&#34;opacityDim&#34;:0.2,&#34;selected&#34;:{&#34;opacity&#34;:1},&#34;debounce&#34;:0},&#34;base_url&#34;:&#34;https://plot.ly&#34;},&#34;evals&#34;:[&#34;config.modeBarButtonsToAdd.0.click&#34;],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;p&gt;Ethereum&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plotly::ggplotly(data_crypto_sentiment %&amp;gt;%
+  filter(coin == &amp;quot;ethereum&amp;quot; &amp;amp; !is.na(sentiment)) %&amp;gt;%
+  group_by(sentiment) %&amp;gt;%
+  summarize(count = n()) %&amp;gt;%
+  arrange(desc(count)) %&amp;gt;%
+  ggplot(aes( x = reorder(as.character(sentiment), count), y = count))+
+  geom_bar(stat = &amp;#39;identity&amp;#39;, fill = &amp;quot;#4271AE&amp;quot;)+
+  coord_flip()+
+  labs(title=&amp;#39;Ethereum Sentiments&amp;#39;, x=&amp;#39;Sentiments&amp;#39;,y=&amp;#39;Sentiment Count&amp;#39;)+
+  theme_economist())&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;htmlwidget-3&#34; style=&#34;width:672px;height:480px;&#34; class=&#34;plotly html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-3&#34;&gt;{&#34;x&#34;:{&#34;data&#34;:[{&#34;orientation&#34;:&#34;h&#34;,&#34;width&#34;:[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999],&#34;base&#34;:[0,0,0,0,0,0,0,0,0,0,0,0,0,0],&#34;x&#34;:[0,1,3,4,4,6,6,6,8,15,25,26,27,92],&#34;y&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;text&#34;:[&#34;reorder(as.character(sentiment), count): superfluous&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): constraining&lt;br /&gt;count:  1&#34;,&#34;reorder(as.character(sentiment), count): litigious&lt;br /&gt;count:  3&#34;,&#34;reorder(as.character(sentiment), count): disgust&lt;br /&gt;count:  4&#34;,&#34;reorder(as.character(sentiment), count): uncertainty&lt;br /&gt;count:  4&#34;,&#34;reorder(as.character(sentiment), count): anger&lt;br /&gt;count:  6&#34;,&#34;reorder(as.character(sentiment), count): sadness&lt;br /&gt;count:  6&#34;,&#34;reorder(as.character(sentiment), count): surprise&lt;br /&gt;count:  6&#34;,&#34;reorder(as.character(sentiment), count): fear&lt;br /&gt;count:  8&#34;,&#34;reorder(as.character(sentiment), count): joy&lt;br /&gt;count: 15&#34;,&#34;reorder(as.character(sentiment), count): negative&lt;br /&gt;count: 25&#34;,&#34;reorder(as.character(sentiment), count): trust&lt;br /&gt;count: 26&#34;,&#34;reorder(as.character(sentiment), count): anticipation&lt;br /&gt;count: 27&#34;,&#34;reorder(as.character(sentiment), count): positive&lt;br /&gt;count: 92&#34;],&#34;type&#34;:&#34;bar&#34;,&#34;marker&#34;:{&#34;autocolorscale&#34;:false,&#34;color&#34;:&#34;rgba(66,113,174,1)&#34;,&#34;line&#34;:{&#34;width&#34;:1.88976377952756,&#34;color&#34;:&#34;transparent&#34;}},&#34;showlegend&#34;:false,&#34;xaxis&#34;:&#34;x&#34;,&#34;yaxis&#34;:&#34;y&#34;,&#34;hoverinfo&#34;:&#34;text&#34;,&#34;frame&#34;:null}],&#34;layout&#34;:{&#34;margin&#34;:{&#34;t&#34;:51.8655043586551,&#34;r&#34;:13.2835201328352,&#34;b&#34;:35.8655043586551,&#34;l&#34;:99.626400996264},&#34;plot_bgcolor&#34;:&#34;transparent&#34;,&#34;paper_bgcolor&#34;:&#34;rgba(213,228,235,1)&#34;,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;title&#34;:&#34;&lt;b&gt; Ethereum Sentiments &lt;\/b&gt;&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:19.9252801992528},&#34;xaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[-4.6,96.6],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;0&#34;,&#34;25&#34;,&#34;50&#34;,&#34;75&#34;],&#34;tickvals&#34;:[0,25,50,75],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;0&#34;,&#34;25&#34;,&#34;50&#34;,&#34;75&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;outside&#34;,&#34;tickcolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0.603796369674327,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:true,&#34;linecolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;linewidth&#34;:0.483037095739462,&#34;showgrid&#34;:false,&#34;gridcolor&#34;:null,&#34;gridwidth&#34;:0,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;y&#34;,&#34;title&#34;:&#34;Sentiment Count&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;yaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[0.4,14.6],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;superfluous&#34;,&#34;constraining&#34;,&#34;litigious&#34;,&#34;disgust&#34;,&#34;uncertainty&#34;,&#34;anger&#34;,&#34;sadness&#34;,&#34;surprise&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;negative&#34;,&#34;trust&#34;,&#34;anticipation&#34;,&#34;positive&#34;],&#34;tickvals&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;superfluous&#34;,&#34;constraining&#34;,&#34;litigious&#34;,&#34;disgust&#34;,&#34;uncertainty&#34;,&#34;anger&#34;,&#34;sadness&#34;,&#34;surprise&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;negative&#34;,&#34;trust&#34;,&#34;anticipation&#34;,&#34;positive&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;&#34;,&#34;tickcolor&#34;:null,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:false,&#34;linecolor&#34;:null,&#34;linewidth&#34;:0,&#34;showgrid&#34;:true,&#34;gridcolor&#34;:&#34;rgba(255,255,255,1)&#34;,&#34;gridwidth&#34;:1.05664364693007,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;x&#34;,&#34;title&#34;:&#34;Sentiments&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;shapes&#34;:[{&#34;type&#34;:&#34;rect&#34;,&#34;fillcolor&#34;:null,&#34;line&#34;:{&#34;color&#34;:null,&#34;width&#34;:0,&#34;linetype&#34;:[]},&#34;yref&#34;:&#34;paper&#34;,&#34;xref&#34;:&#34;paper&#34;,&#34;x0&#34;:0,&#34;x1&#34;:1,&#34;y0&#34;:0,&#34;y1&#34;:1}],&#34;showlegend&#34;:false,&#34;legend&#34;:{&#34;bgcolor&#34;:&#34;transparent&#34;,&#34;bordercolor&#34;:&#34;transparent&#34;,&#34;borderwidth&#34;:1.71796707229778,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:16.604400166044}},&#34;hovermode&#34;:&#34;closest&#34;,&#34;barmode&#34;:&#34;relative&#34;},&#34;config&#34;:{&#34;doubleClick&#34;:&#34;reset&#34;,&#34;modeBarButtonsToAdd&#34;:[{&#34;name&#34;:&#34;Collaborate&#34;,&#34;icon&#34;:{&#34;width&#34;:1000,&#34;ascent&#34;:500,&#34;descent&#34;:-50,&#34;path&#34;:&#34;M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z&#34;},&#34;click&#34;:&#34;function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == &#39;?viewer_pane=1&#39;) {\n          alert(&#39;To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;);\n        } else {\n          window.open(&#39;https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;, &#39;_blank&#39;);\n        }\n      }&#34;}],&#34;cloud&#34;:false},&#34;source&#34;:&#34;A&#34;,&#34;attrs&#34;:{&#34;1b0136afd43c&#34;:{&#34;x&#34;:{},&#34;y&#34;:{},&#34;type&#34;:&#34;bar&#34;}},&#34;cur_data&#34;:&#34;1b0136afd43c&#34;,&#34;visdat&#34;:{&#34;1b0136afd43c&#34;:[&#34;function (y) &#34;,&#34;x&#34;]},&#34;highlight&#34;:{&#34;on&#34;:&#34;plotly_click&#34;,&#34;persistent&#34;:false,&#34;dynamic&#34;:false,&#34;selectize&#34;:false,&#34;opacityDim&#34;:0.2,&#34;selected&#34;:{&#34;opacity&#34;:1},&#34;debounce&#34;:0},&#34;base_url&#34;:&#34;https://plot.ly&#34;},&#34;evals&#34;:[&#34;config.modeBarButtonsToAdd.0.click&#34;],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;p&gt;Litecoin&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plotly::ggplotly(data_crypto_sentiment %&amp;gt;%
+  filter(coin == &amp;quot;litecoin&amp;quot; &amp;amp; !is.na(sentiment)) %&amp;gt;%
+  group_by(sentiment) %&amp;gt;%
+  summarize(count = n()) %&amp;gt;%
+  arrange(desc(count)) %&amp;gt;%
+  ggplot(aes( x = reorder(as.character(sentiment), count), y = count))+
+  geom_bar(stat = &amp;#39;identity&amp;#39;, fill = &amp;quot;#4271AE&amp;quot;)+
+  coord_flip()+
+  labs(title=&amp;#39;Litecoin Sentiments&amp;#39;, x=&amp;#39;Sentiments&amp;#39;,y=&amp;#39;Sentiment Count&amp;#39;)+
+  theme_economist())&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;htmlwidget-4&#34; style=&#34;width:672px;height:480px;&#34; class=&#34;plotly html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-4&#34;&gt;{&#34;x&#34;:{&#34;data&#34;:[{&#34;orientation&#34;:&#34;h&#34;,&#34;width&#34;:[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999],&#34;base&#34;:[0,0,0,0,0,0,0,0,0,0,0,0,0,0],&#34;x&#34;:[0,0,0,2,5,5,8,11,12,12,18,24,25,80],&#34;y&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;text&#34;:[&#34;reorder(as.character(sentiment), count): constraining&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): litigious&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): superfluous&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): uncertainty&lt;br /&gt;count:  2&#34;,&#34;reorder(as.character(sentiment), count): disgust&lt;br /&gt;count:  5&#34;,&#34;reorder(as.character(sentiment), count): sadness&lt;br /&gt;count:  5&#34;,&#34;reorder(as.character(sentiment), count): surprise&lt;br /&gt;count:  8&#34;,&#34;reorder(as.character(sentiment), count): anger&lt;br /&gt;count: 11&#34;,&#34;reorder(as.character(sentiment), count): fear&lt;br /&gt;count: 12&#34;,&#34;reorder(as.character(sentiment), count): joy&lt;br /&gt;count: 12&#34;,&#34;reorder(as.character(sentiment), count): trust&lt;br /&gt;count: 18&#34;,&#34;reorder(as.character(sentiment), count): anticipation&lt;br /&gt;count: 24&#34;,&#34;reorder(as.character(sentiment), count): negative&lt;br /&gt;count: 25&#34;,&#34;reorder(as.character(sentiment), count): positive&lt;br /&gt;count: 80&#34;],&#34;type&#34;:&#34;bar&#34;,&#34;marker&#34;:{&#34;autocolorscale&#34;:false,&#34;color&#34;:&#34;rgba(66,113,174,1)&#34;,&#34;line&#34;:{&#34;width&#34;:1.88976377952756,&#34;color&#34;:&#34;transparent&#34;}},&#34;showlegend&#34;:false,&#34;xaxis&#34;:&#34;x&#34;,&#34;yaxis&#34;:&#34;y&#34;,&#34;hoverinfo&#34;:&#34;text&#34;,&#34;frame&#34;:null}],&#34;layout&#34;:{&#34;margin&#34;:{&#34;t&#34;:51.8655043586551,&#34;r&#34;:13.2835201328352,&#34;b&#34;:35.8655043586551,&#34;l&#34;:99.626400996264},&#34;plot_bgcolor&#34;:&#34;transparent&#34;,&#34;paper_bgcolor&#34;:&#34;rgba(213,228,235,1)&#34;,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;title&#34;:&#34;&lt;b&gt; Litecoin Sentiments &lt;\/b&gt;&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:19.9252801992528},&#34;xaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[-4,84],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;0&#34;,&#34;20&#34;,&#34;40&#34;,&#34;60&#34;,&#34;80&#34;],&#34;tickvals&#34;:[0,20,40,60,80],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;0&#34;,&#34;20&#34;,&#34;40&#34;,&#34;60&#34;,&#34;80&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;outside&#34;,&#34;tickcolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0.603796369674327,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:true,&#34;linecolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;linewidth&#34;:0.483037095739462,&#34;showgrid&#34;:false,&#34;gridcolor&#34;:null,&#34;gridwidth&#34;:0,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;y&#34;,&#34;title&#34;:&#34;Sentiment Count&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;yaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[0.4,14.6],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;constraining&#34;,&#34;litigious&#34;,&#34;superfluous&#34;,&#34;uncertainty&#34;,&#34;disgust&#34;,&#34;sadness&#34;,&#34;surprise&#34;,&#34;anger&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;trust&#34;,&#34;anticipation&#34;,&#34;negative&#34;,&#34;positive&#34;],&#34;tickvals&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;constraining&#34;,&#34;litigious&#34;,&#34;superfluous&#34;,&#34;uncertainty&#34;,&#34;disgust&#34;,&#34;sadness&#34;,&#34;surprise&#34;,&#34;anger&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;trust&#34;,&#34;anticipation&#34;,&#34;negative&#34;,&#34;positive&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;&#34;,&#34;tickcolor&#34;:null,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:false,&#34;linecolor&#34;:null,&#34;linewidth&#34;:0,&#34;showgrid&#34;:true,&#34;gridcolor&#34;:&#34;rgba(255,255,255,1)&#34;,&#34;gridwidth&#34;:1.05664364693007,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;x&#34;,&#34;title&#34;:&#34;Sentiments&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;shapes&#34;:[{&#34;type&#34;:&#34;rect&#34;,&#34;fillcolor&#34;:null,&#34;line&#34;:{&#34;color&#34;:null,&#34;width&#34;:0,&#34;linetype&#34;:[]},&#34;yref&#34;:&#34;paper&#34;,&#34;xref&#34;:&#34;paper&#34;,&#34;x0&#34;:0,&#34;x1&#34;:1,&#34;y0&#34;:0,&#34;y1&#34;:1}],&#34;showlegend&#34;:false,&#34;legend&#34;:{&#34;bgcolor&#34;:&#34;transparent&#34;,&#34;bordercolor&#34;:&#34;transparent&#34;,&#34;borderwidth&#34;:1.71796707229778,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:16.604400166044}},&#34;hovermode&#34;:&#34;closest&#34;,&#34;barmode&#34;:&#34;relative&#34;},&#34;config&#34;:{&#34;doubleClick&#34;:&#34;reset&#34;,&#34;modeBarButtonsToAdd&#34;:[{&#34;name&#34;:&#34;Collaborate&#34;,&#34;icon&#34;:{&#34;width&#34;:1000,&#34;ascent&#34;:500,&#34;descent&#34;:-50,&#34;path&#34;:&#34;M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z&#34;},&#34;click&#34;:&#34;function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == &#39;?viewer_pane=1&#39;) {\n          alert(&#39;To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;);\n        } else {\n          window.open(&#39;https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;, &#39;_blank&#39;);\n        }\n      }&#34;}],&#34;cloud&#34;:false},&#34;source&#34;:&#34;A&#34;,&#34;attrs&#34;:{&#34;1b013bd2f878&#34;:{&#34;x&#34;:{},&#34;y&#34;:{},&#34;type&#34;:&#34;bar&#34;}},&#34;cur_data&#34;:&#34;1b013bd2f878&#34;,&#34;visdat&#34;:{&#34;1b013bd2f878&#34;:[&#34;function (y) &#34;,&#34;x&#34;]},&#34;highlight&#34;:{&#34;on&#34;:&#34;plotly_click&#34;,&#34;persistent&#34;:false,&#34;dynamic&#34;:false,&#34;selectize&#34;:false,&#34;opacityDim&#34;:0.2,&#34;selected&#34;:{&#34;opacity&#34;:1},&#34;debounce&#34;:0},&#34;base_url&#34;:&#34;https://plot.ly&#34;},&#34;evals&#34;:[&#34;config.modeBarButtonsToAdd.0.click&#34;],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Web Scraping Analysis Function</title>
       <link>/post/web-scraping-twitter/</link>
       <pubDate>Fri, 20 Jul 2018 00:00:00 -0700</pubDate>
@@ -238,171 +354,9 @@ data_crypto_sentiment &amp;lt;- read.csv(&#39;data_crypto_sentiment.csv&#39;)
     </item>
     
     <item>
-      <title>Example Talk</title>
-      <link>/talk/example-talk/</link>
-      <pubDate>Sun, 01 Jan 2017 00:00:00 -0800</pubDate>
-      
-      <guid>/talk/example-talk/</guid>
-      <description>&lt;p&gt;Embed your slides or video here using &lt;a href=&#34;https://sourcethemes.com/academic/post/writing-markdown-latex/&#34; target=&#34;_blank&#34;&gt;shortcodes&lt;/a&gt;. Further details can easily be added using &lt;em&gt;Markdown&lt;/em&gt; and $\rm \LaTeX$ math code.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Fraud Analytics: Fraud Detection Model</title>
-      <link>/project/supervised-learning/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
-      
-      <guid>/project/supervised-learning/</guid>
-      <description>
-
-&lt;h5 id=&#34;description&#34;&gt;Description&lt;/h5&gt;
-
-&lt;p&gt;This report provides a detailed analysis of the ‘applications’ dataset using supervised fraud algorithms and machine
-learning statistical techniques.
-The programming tools used for Data Cleaning, Modeling, and Evaluation were Microsoft Excel, Tableau, R, along with
-mySQL through R. The original dataset contains unique records of more 90,000 product applications over the year 2016.
-Necessary feature analysis include:
-● Data Understanding and Data Cleaning (dealing with frivolous values)
-● Feature Engineering (creating expert Variables, performing feature selection)
-● Data Modeling (running fraud detection models)
-● Data Evaluation (comparing model results)&lt;/p&gt;
-
-&lt;h5 id=&#34;project-goal&#34;&gt;Project Goal&lt;/h5&gt;
-
-&lt;p&gt;Our objective for this project is to use a supervised fraud algorithm to build a fraud detection model that predicts product
-application fraud with high predictive accuracy. More precisely, we aim to find the top performing machine learning
-model that is able to predict the highest number of fraudulent cases with a low false positive rate.
-The report will present several classification machine learning techniques for fraud detection and their performances on
-our dataset, in complete detail such as Logistic Regression, Random Forests, Support Vector Machine, and Gradient
-Boosting Trees.&lt;/p&gt;
-
-&lt;h5 id=&#34;key-findings&#34;&gt;Key Findings&lt;/h5&gt;
-
-&lt;p&gt;Here are the main key findings from building a Fraud Detection Model on the Applications dataset:
-● The Gradient Boosting Trees method yielded the best Fraud Detection model at 10% penetration on the OOT (Out
-of Time) dataset with a FDR (Fraud Detection Rate) of 13.02% including a FDR of 12.50% on the testing dataset
-● The Support Vector Machine Method yielded the lowest Fraud Detection Rate (FDR) at 10% penetration on the
-OOT (Out of Time) dataset with a FDR (Fraud Detection Rate) of 11.81% including a FDR of 11.01% on the testing
-dataset
-● Overall, Gradient Boosting Trees and Random Forest Models both demonstrated relatively high predictive
-performance, with the highest predictive power in their respective segments&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://drive.google.com/open?id=1GA_gXqiBCMlOUP8eLz_TatD9mEqLREGM&#34; download&gt;Click to Download the full report&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Fraud Analytics: Fraud Score Calculation</title>
-      <link>/project/deep-learning/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
-      
-      <guid>/project/deep-learning/</guid>
-      <description>
-
-&lt;h5 id=&#34;description&#34;&gt;Description&lt;/h5&gt;
-
-&lt;p&gt;This report provides a detailed analysis of ‘New York City Property Tax Valuation Data’ and also aims at
-identifying potential fraudulent records from the data set using unsupervised machine learning methods.
-The programming tools used for Data Cleaning were performed on Microsoft Excel and R. The original
-dataset contains unique records of more than 1 million properties across the state of New York with 30
-different fields, both numerical and categorical. Necessary feature analysis include:
-● Data Understanding and Data Cleaning (estimating missing values of each fields)
-● Data Modeling (creating expert variables) and Data Evaluation
-● Fraud Score Calculation (Heuristic Algorithm and Autoencoder)&lt;/p&gt;
-
-&lt;h5 id=&#34;project-goal&#34;&gt;Project Goal&lt;/h5&gt;
-
-&lt;p&gt;Our objective for this project is to use machine learning algorithms such as Autoencoder and Heuristic
-Algorithms and calculate a fraud score for each of the New York Property data records to analyze
-anomalies for potential fraud detection. By applying both of the unsupervised machine learning
-methods, records with high scores show to be potentially fraudulent. The report will explain each step in
-complete detail.&lt;/p&gt;
-
-&lt;h5 id=&#34;key-findings&#34;&gt;Key Findings&lt;/h5&gt;
-
-&lt;p&gt;The two fraud detection algorithms we used, Heuristic and Autoencoder-Based Anomaly Detection, had
-a considerably high overlap matching percentage among the top 1% of all records:
-● Missing values were properly filled using reasonable data cleaning methodology.
-● The 51 expert variables were carefully crafted to perform PCA analysis.
-● After normalizing the fraud scores and visualizing the scores, we found both score distributions
-to be right skewed.
-● Among the top 10 highest fraud score records, anomalies were found in several fields.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://drive.google.com/open?id=1-UvdR-EvZEsEr-Fjv4qaMBiuqFKvYwbq&#34; download&gt;Click to Download the full report&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Optimizing Course Scheduling</title>
-      <link>/project/example-external-project/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
-      
-      <guid>/project/example-external-project/</guid>
-      <description>
-
-&lt;h5 id=&#34;executive-summary&#34;&gt;Executive Summary&lt;/h5&gt;
-
-&lt;p&gt;For several universities across the world, the implementation of a systematic approach
-to course scheduling remains a problem. Discrete optimization approaches have been
-used to solve the problem independently at such institutions, however owing to the
-complex nature of the problem compounded by the viewpoints of various
-stakeholders, a universal “cookie-cutter” solution does not exist. There are 7
-departments in the Marshall School of Business at USC, and course scheduling is
-currently performed by reusing the course schedule from the previous year as closely
-as possible and manually implementing a series of reforms to improve efficiency and
-transparency. The current process assigns over 400 courses into 45 schedulable
-rooms at 42 different times. However, the schedules produced by the current process
-are not always transparent and efficient. Additionally, sections are scheduled and
-de-scheduled multiple times during the course allotment process which makes greedy
-approaches to the allocation problem inefficient.&lt;/p&gt;
-
-&lt;p&gt;Our solution to the problem involves the creation of a tractable MIP-based allocation
-tool that equitably assigns departments to classroom-timeslots. An algorithm [1]
-developed in-house generates classroom-timeslot preference scores for each
-department based on survey results [2] , and every run of the allocation tool outputs
-candidate sets of classroom-timeslots for each department. The size of the candidate
-sets is dependent upon a model-tuning parameter that controls the greediness of the
-allocation approach. This grants a greater degree of flexibility in course-scheduling and
-ensures that a certain quantity of classroom-timeslots of each category [3] are available
-for the next (potential) run of the allocation tool to assign the remaining sections. The
-focus of this report is to describe the functioning of the tool, and the business value it
-offers to the administrative wing of the Marshall School of Business.&lt;/p&gt;
-
-&lt;p&gt;In the first step of the report, we propose a precise and high-level explanation on how
-the application of Mixed Integer Programming can be used to solve the course
-scheduling problem. In the second step of the report, we formulate a Mixed Integer
-Program by creating the input and output data, the decision variables, the objective
-function and the constraints. We conclude with a description of the output from one
-run of the model, and why the model makes sense and is easily implementable.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://drive.google.com/open?id=115TjqrvSDv8hPvKhm-iOd1-nWNCgRRGw&#34; download&gt;Click to Download the full report&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>A Person Re-Identification System For Mobile Devices</title>
-      <link>/publication/person-re-identification/</link>
-      <pubDate>Tue, 01 Sep 2015 00:00:00 -0700</pubDate>
-      
-      <guid>/publication/person-re-identification/</guid>
-      <description>&lt;p&gt;More detail can easily be written here using &lt;em&gt;Markdown&lt;/em&gt; and $\rm \LaTeX$ math code.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Mobile visual clothing search</title>
-      <link>/publication/clothing-search/</link>
-      <pubDate>Mon, 01 Jul 2013 00:00:00 -0700</pubDate>
-      
-      <guid>/publication/clothing-search/</guid>
-      <description>&lt;p&gt;More detail can easily be written here using &lt;em&gt;Markdown&lt;/em&gt; and $\rm \LaTeX$ math code.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>Titanic Survival</title>
       <link>/post/titanic_survival/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 20 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/titanic_survival/</guid>
       <description>&lt;div id=&#34;loading-data-set-and-libraries&#34; class=&#34;section level5&#34;&gt;
@@ -977,118 +931,272 @@ submission %&amp;gt;% head()&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
-      <title>Twitter Sentiment Analysis</title>
-      <link>/post/twitter_sentiment_analysis/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>Example Talk</title>
+      <link>/talk/example-talk/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 -0800</pubDate>
       
-      <guid>/post/twitter_sentiment_analysis/</guid>
-      <description>&lt;script src=&#34;/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/rmarkdown-libs/d3/d3.min.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/rmarkdown-libs/d3wordcloud/d3.layout.cloud.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/rmarkdown-libs/d3wordcloud-binding/d3wordcloud.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/rmarkdown-libs/plotly-binding/plotly.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/rmarkdown-libs/typedarray/typedarray.min.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;/rmarkdown-libs/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;/rmarkdown-libs/crosstalk/css/crosstalk.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;/rmarkdown-libs/crosstalk/js/crosstalk.min.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;/rmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;/rmarkdown-libs/plotly-main/plotly-latest.min.js&#34;&gt;&lt;/script&gt;
+      <guid>/talk/example-talk/</guid>
+      <description>&lt;p&gt;Embed your slides or video here using &lt;a href=&#34;https://sourcethemes.com/academic/post/writing-markdown-latex/&#34; target=&#34;_blank&#34;&gt;shortcodes&lt;/a&gt;. Further details can easily be added using &lt;em&gt;Markdown&lt;/em&gt; and $\rm \LaTeX$ math code.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Fraud Analytics: Fraud Detection Model</title>
+      <link>/project/supervised-learning/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      
+      <guid>/project/supervised-learning/</guid>
+      <description>
 
+&lt;h5 id=&#34;description&#34;&gt;Description&lt;/h5&gt;
 
-&lt;p&gt;From my previous post, I first performed extensive data cleaning in order to analyze the sentiment of each individual cryptocurrency. Here is the result of my analysis.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(twitteR)
-library(dplyr)
-library(tm)
-library(wordcloud)
-library(tidytext)
-library(tidyverse)
-library(sqldf)
-library(ggplot2)
-library(ggthemes)
-library(data.table)
-library(gridExtra)
+&lt;p&gt;This report provides a detailed analysis of the ‘applications’ dataset using supervised fraud algorithms and machine
+learning statistical techniques.
+The programming tools used for Data Cleaning, Modeling, and Evaluation were Microsoft Excel, Tableau, R, along with
+mySQL through R. The original dataset contains unique records of more 90,000 product applications over the year 2016.
+Necessary feature analysis include:&lt;/p&gt;
 
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;wordclouds-and-d3wordclouds&#34; class=&#34;section level5&#34;&gt;
-&lt;h5&gt;WordClouds and D3WordClouds&lt;/h5&gt;
-&lt;p&gt;Bitcoin&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(d3wordcloud)
-big_data_clean_2 &amp;lt;- read.csv(&amp;quot;big_data_clean_2.csv&amp;quot;)
+&lt;ul&gt;
+&lt;li&gt;Data Understanding and Data Cleaning (dealing with frivolous values)&lt;/li&gt;
+&lt;li&gt;Feature Engineering (creating expert Variables, performing feature selection)&lt;/li&gt;
+&lt;li&gt;Data Modeling (running fraud detection models)&lt;/li&gt;
+&lt;li&gt;Data Evaluation (comparing model results)&lt;/li&gt;
+&lt;/ul&gt;
 
-bitcoin_words &amp;lt;-  big_data_clean_2 %&amp;gt;%
-            filter(coin == &amp;quot;bitcoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count))
+&lt;h5 id=&#34;project-goal&#34;&gt;Project Goal&lt;/h5&gt;
 
-set.seed(123)
-wordcloud(words = bitcoin_words$words, freq = bitcoin_words$words_count, min.freq = 10,
-          max.words=100, random.order=FALSE, rot.per=0.35, 
-          colors=brewer.pal(10, &amp;quot;Dark2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/twitter_sentiment_analysis_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d3wordcloud(bitcoin_words$words, bitcoin_words$words_count,  padding = 5,  width = &amp;quot;100%&amp;quot;, height = &amp;quot;500px&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;htmlwidget-1&#34; style=&#34;width:100%;height:500px;&#34; class=&#34;d3wordcloud html-widget&#34;&gt;&lt;/div&gt;
-&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;data&#34;:{&#34;text&#34;:[&#34;coin&#34;,&#34;airdrop&#34;,&#34;mwt&#34;,&#34;live&#34;,&#34;wallet&#34;,&#34;airdropping&#34;,&#34;ethereum&#34;,&#34;first&#34;,&#34;participants&#34;,&#34;buy&#34;,&#34;cash&#34;,&#34;finance&#34;,&#34;free&#34;,&#34;litecoin&#34;,&#34;midas&#34;,&#34;mining&#34;,&#34;now&#34;,&#34;yahoo&#34;,&#34;0xc73404e3e8961b83a63ef8ec40f41a2b15a9d0fd&#34;,&#34;market&#34;,&#34;platform&#34;,&#34;proc&#34;,&#34;selfdrop&#34;,&#34;send&#34;,&#34;token&#34;,&#34;trading&#34;,&#34;will&#34;,&#34;001&#34;,&#34;1000&#34;,&#34;500&#34;,&#34;africa&#34;,&#34;back&#34;,&#34;blockchains&#34;,&#34;censorship&#34;,&#34;consequences&#34;,&#34;corporate&#34;,&#34;danger&#34;,&#34;earn&#34;,&#34;ezscott48&#34;,&#34;going&#34;,&#34;integrates&#34;,&#34;money&#34;,&#34;new&#34;,&#34;regulating&#34;,&#34;see&#34;,&#34;tch&#34;,&#34;time&#34;,&#34;today&#34;,&#34;traditional&#34;,&#34;unintended&#34;,&#34;valued&#34;,&#34;week&#34;,&#34;worth$10&#34;,&#34;$30&#34;,&#34;$7000&#34;,&#34;11000&#34;,&#34;3500&#34;,&#34;adoption&#34;,&#34;also&#34;,&#34;app&#34;,&#34;ark&#34;,&#34;asset&#34;,&#34;beat&#34;,&#34;big&#34;,&#34;blockchainbased&#34;,&#34;bulls&#34;,&#34;can&#34;,&#34;cointelegraph&#34;,&#34;cornucopia&#34;,&#34;cpollo&#34;,&#34;device&#34;,&#34;entrepreneur&#34;,&#34;everywhere&#34;,&#34;evolution&#34;,&#34;excited&#34;,&#34;faucet&#34;,&#34;featured&#34;,&#34;fintech&#34;,&#34;followback&#34;,&#34;forex&#34;,&#34;four&#34;,&#34;future&#34;,&#34;good&#34;,&#34;great&#34;,&#34;guys&#34;,&#34;holds&#34;,&#34;huge&#34;,&#34;ico&#34;,&#34;interested&#34;,&#34;investment&#34;,&#34;japan&#34;,&#34;join&#34;,&#34;jump&#34;,&#34;know&#34;,&#34;legal&#34;,&#34;less&#34;,&#34;looking&#34;,&#34;mine&#34;,&#34;mobile&#34;,&#34;module&#34;,&#34;moduleproject&#34;,&#34;names&#34;,&#34;next&#34;,&#34;offering&#34;,&#34;one&#34;,&#34;patent&#34;,&#34;pay&#34;,&#34;payment&#34;,&#34;people&#34;,&#34;pips&#34;,&#34;presale&#34;,&#34;procurrency&#34;,&#34;project&#34;,&#34;really&#34;,&#34;reddit&#34;,&#34;scalabilit&#34;,&#34;sign&#34;,&#34;square&#34;,&#34;storage&#34;,&#34;tenfoldprotocol&#34;,&#34;thailand&#34;,&#34;trade&#34;,&#34;using&#34;,&#34;via&#34;,&#34;want&#34;,&#34;war&#34;,&#34;ways&#34;,&#34;youtube&#34;,&#34;blockchain&#34;,&#34;news&#34;,&#34;get&#34;,&#34;$100&#34;,&#34;$100k&#34;,&#34;$20k&#34;,&#34;$30to&#34;,&#34;$351000&#34;,&#34;$400&#34;,&#34;$ake&#34;,&#34;$bigg&#34;,&#34;$bloc&#34;,&#34;$blok&#34;,&#34;100&#34;,&#34;101&#34;,&#34;11000proc&#34;,&#34;130284&#34;,&#34;168&#34;,&#34;1retweet&#34;,&#34;2017&#34;,&#34;2018&#34;,&#34;2follow&#34;,&#34;3000&#34;,&#34;3500proc&#34;,&#34;35c3&#34;,&#34;5000&#34;,&#34;accept&#34;,&#34;accepted&#34;,&#34;accepts&#34;,&#34;across&#34;,&#34;add&#34;,&#34;address&#34;,&#34;age&#34;,&#34;aircoins&#34;,&#34;airdrops&#34;,&#34;alternative&#34;,&#34;amazing&#34;,&#34;analysis&#34;,&#34;another&#34;,&#34;application&#34;,&#34;aqua&#34;,&#34;aqualite&#34;,&#34;architect&#34;,&#34;aset&#34;,&#34;asian&#34;,&#34;asked&#34;,&#34;askingforafriend&#34;,&#34;assets&#34;,&#34;augmented&#34;,&#34;average&#34;,&#34;awesome&#34;,&#34;bank&#34;,&#34;basic&#34;,&#34;basics&#34;,&#34;basis&#34;,&#34;bday&#34;,&#34;begins&#34;,&#34;bestdressed&#34;,&#34;beta&#34;,&#34;betta&#34;,&#34;better$$$&#34;,&#34;binary&#34;,&#34;binaryoptions&#34;,&#34;bitads&#34;,&#34;bitches&#34;,&#34;bitcofarm&#34;,&#34;bitcoingood&#34;,&#34;biweekly&#34;,&#34;boost&#34;,&#34;boring&#34;,&#34;bot&#34;,&#34;bottomfishing&#34;,&#34;bou&#34;,&#34;bounty&#34;,&#34;bril&#34;,&#34;btcfxea&#34;,&#34;build&#34;,&#34;bullish&#34;,&#34;bullrun&#34;,&#34;bullyesq&#34;,&#34;busted&#34;,&#34;calvinayre&#34;,&#34;card&#34;,&#34;cards&#34;,&#34;central&#34;,&#34;ceo&#34;,&#34;cha&#34;,&#34;channel&#34;,&#34;chaos&#34;,&#34;charges&#34;,&#34;chartpick&#34;,&#34;chief&#34;,&#34;claim&#34;,&#34;clean&#34;,&#34;click&#34;,&#34;close&#34;,&#34;closed&#34;,&#34;closing&#34;,&#34;cloud&#34;,&#34;cmegroup&#34;,&#34;cnbc&#34;,&#34;coal&#34;,&#34;coinme&#34;,&#34;combines&#34;,&#34;come&#34;,&#34;comes&#34;,&#34;communication&#34;,&#34;congress&#34;,&#34;contest&#34;,&#34;continues&#34;,&#34;corginomics&#34;,&#34;cornucopiaico&#34;,&#34;countries&#34;,&#34;countrys&#34;,&#34;cracked&#34;,&#34;crowdfunding&#34;,&#34;cryptoassets&#34;,&#34;cryptocean&#34;,&#34;cryptocryptocurrency&#34;,&#34;cryptocurreency&#34;,&#34;cryptoisthefuture&#34;,&#34;cryptokiitten&#34;,&#34;cryptolife&#34;,&#34;cryptonews&#34;,&#34;cryptotonight&#34;,&#34;cup&#34;,&#34;currency&#34;,&#34;current&#34;,&#34;daily&#34;,&#34;dangerous&#34;,&#34;dealer&#34;,&#34;dealing&#34;,&#34;decentralized&#34;,&#34;decide&#34;,&#34;deck&#34;,&#34;defenseintel&#34;,&#34;develop&#34;,&#34;dictated&#34;,&#34;digest&#34;,&#34;distributes&#34;,&#34;dlt&#34;,&#34;dodiis17&#34;,&#34;dodiisww&#34;,&#34;dogshit&#34;,&#34;domain&#34;,&#34;dont&#34;,&#34;draintheswamp&#34;,&#34;drew&#34;,&#34;drive&#34;,&#34;drop&#34;,&#34;eagerly&#34;,&#34;economics&#34;,&#34;economy&#34;,&#34;ecosystem&#34;,&#34;edgewallet&#34;,&#34;educated&#34;,&#34;effect&#34;,&#34;employed&#34;,&#34;enabling&#34;,&#34;endless&#34;,&#34;energy&#34;,&#34;enjoy&#34;,&#34;entirely&#34;,&#34;era&#34;,&#34;especially&#34;,&#34;eur&#34;,&#34;ever&#34;,&#34;every&#34;,&#34;expensive&#34;,&#34;explained&#34;,&#34;exworkers&#34;,&#34;facebook&#34;,&#34;facing&#34;,&#34;facts&#34;,&#34;family&#34;,&#34;farm&#34;,&#34;fast&#34;,&#34;feature&#34;,&#34;federal&#34;,&#34;fiat&#34;,&#34;finally&#34;,&#34;find&#34;,&#34;followme&#34;,&#34;forextrade&#34;,&#34;forget&#34;,&#34;forums&#34;,&#34;franchise&#34;,&#34;freecoins&#34;,&#34;friday&#34;,&#34;friends&#34;,&#34;fuck&#34;,&#34;funding&#34;,&#34;futures&#34;,&#34;gbpusd&#34;,&#34;getting&#34;,&#34;getvthqt&#34;,&#34;giveaway&#34;,&#34;gold&#34;,&#34;golden&#34;,&#34;gonna&#34;,&#34;got&#34;,&#34;grand&#34;,&#34;grassroots&#34;,&#34;grave&#34;,&#34;gregorymckenna&#34;,&#34;grown&#34;,&#34;gtgt&#34;,&#34;guide&#34;,&#34;hang&#34;,&#34;hardware&#34;,&#34;havent&#34;,&#34;hearts&#34;,&#34;help&#34;,&#34;holy&#34;,&#34;httpstco0iaeolmlth&#34;,&#34;httpstco0vibckuxyu&#34;,&#34;httpstco0zbuo6p7nh&#34;,&#34;httpstco1mbuaj77hn&#34;,&#34;httpstco1xzfzzeegt&#34;,&#34;httpstco2wvnzgysw9&#34;,&#34;httpstco3di5u2zcl5&#34;,&#34;httpstco3tynqwrvzo&#34;,&#34;httpstco4cmzkgjf9k&#34;,&#34;httpstco4unrjjj1sj&#34;,&#34;httpstco5ao0peefyv&#34;,&#34;httpstco5lddyfky16&#34;,&#34;httpstco5zswlr9cew&#34;,&#34;httpstco64qbuzuygd&#34;,&#34;httpstco6hlsxb0kz4&#34;,&#34;httpstco6l4v4w179a&#34;,&#34;httpstco6puimtrkbd&#34;,&#34;httpstco7hyrtguh6e&#34;,&#34;httpstco7vbdrwhzcx&#34;,&#34;httpstco9agzxapztg&#34;,&#34;httpstco9rnowwbpkl&#34;,&#34;httpstco9tqm76edlg&#34;,&#34;httpstco9v3oqqhd24&#34;,&#34;httpstcoa78ed7h5tk&#34;,&#34;httpstcoamptdzc3zv&#34;,&#34;httpstcocaomjwby7z&#34;,&#34;httpstcocejneye4pw&#34;,&#34;httpstcocgqhwus6lo&#34;,&#34;httpstcocjixmjvpiz&#34;,&#34;httpstcod5dloqlbhk&#34;,&#34;httpstcod9nasd68kc&#34;,&#34;httpstcode7q3z8zrh&#34;,&#34;httpstcodmkqskxlhe&#34;,&#34;httpstcodnllcef1hh&#34;,&#34;httpstcodx2smitbrq&#34;,&#34;httpstcoemeihfjivs&#34;,&#34;httpstcoepmuhcz396&#34;,&#34;httpstcoeqgpk6vvo0&#34;,&#34;httpstcof2svfj9p6e&#34;,&#34;httpstcof5kcjmgdjk&#34;,&#34;httpstcof9y7bewhrf&#34;,&#34;httpstcofraj05jvdz&#34;,&#34;httpstcogxvxrqs1yq&#34;,&#34;httpstcohfngkubwcg&#34;,&#34;httpstcohv3wzj337t&#34;,&#34;httpstcoiln8acxzho&#34;,&#34;httpstcoilsbc8qax3&#34;,&#34;httpstcoiptsrswhlf&#34;,&#34;httpstcoipwso37ajd&#34;,&#34;httpstcoiqmsbz9pdr&#34;,&#34;httpstcoiqsxcr9kkf&#34;,&#34;httpstcoirunvrpb02&#34;,&#34;httpstcoivnsoaq1e7&#34;,&#34;httpstcoiwkqsc0xsj&#34;,&#34;httpstcojhafxzqbav&#34;,&#34;httpstcojn7pmkje4m&#34;,&#34;httpstcojzjpsbqpgp&#34;,&#34;httpstcokzgcciajfs&#34;,&#34;httpstcol8jfqeplbx&#34;,&#34;httpstcolhi81dz2hu&#34;,&#34;httpstcolirsgcts5e&#34;,&#34;httpstcolrgcuqnfgp&#34;,&#34;httpstcomb8caqo3m5&#34;,&#34;httpstcomczvdtdqqy&#34;,&#34;httpstcomhk9mwmhat&#34;,&#34;httpstcomm2w7bljne&#34;,&#34;httpstcomodezzff8f&#34;,&#34;httpstcomqzsc2ugys&#34;,&#34;httpstcomr0eg4lmod&#34;,&#34;httpstcomw5pdtrygp&#34;,&#34;httpstcon04ceg38lz&#34;,&#34;httpstconlq2ki1tqm&#34;,&#34;httpstcontqofgfpsu&#34;,&#34;httpstcoohycd2ngae&#34;,&#34;httpstcooqafqtj1r2&#34;,&#34;httpstcootvppjcfw9&#34;,&#34;httpstcopbld2fqnpt&#34;,&#34;httpstcopgadtx3bx0&#34;,&#34;httpstcopktjwhnca5&#34;,&#34;httpstcoqmr7poezai&#34;,&#34;httpstcoqw8kaskffj&#34;,&#34;httpstcoqy6cmhg828&#34;,&#34;httpstcoqzpiwbvmac&#34;,&#34;httpstcorxqnq1urna&#34;,&#34;httpstcorypuber3cs&#34;,&#34;httpstcos0kpgxfqsl&#34;,&#34;httpstcososewrnbw6&#34;,&#34;httpstcosrhyg2wij7&#34;,&#34;httpstcosvuxnigww5&#34;,&#34;httpstcosz0im9dwur&#34;,&#34;httpstcot45jrayuix&#34;,&#34;httpstcotadhsc6jkb&#34;,&#34;httpstcotcoauiptdy&#34;,&#34;httpstcotmob8wjver&#34;,&#34;httpstcotsmjgovlya&#34;,&#34;httpstcou5zlg3zz5p&#34;,&#34;httpstcouifeqs80ba&#34;,&#34;httpstcoul0fmcx78e&#34;,&#34;httpstcoumdgwtfxtp&#34;,&#34;httpstcoupow9kvey8&#34;,&#34;httpstcouzt5gue9wl&#34;,&#34;httpstcovdno18c8zc&#34;,&#34;httpstcovimjoszqnu&#34;,&#34;httpstcovthobvguit&#34;,&#34;httpstcowfpkkckwn6&#34;,&#34;httpstcowh5ijgz9mz&#34;,&#34;httpstcowlugtwuw7o&#34;,&#34;httpstcoxfyvq7idtr&#34;,&#34;httpstcoxs42fhc2b1&#34;,&#34;httpstcoxyzmnbc8he&#34;,&#34;httpstcoybxd3dfy7t&#34;,&#34;httpstcoyjzxkoli1k&#34;,&#34;httpstcoz12xi6pa2ss&#34;,&#34;httpstcozkir04iqm9&#34;,&#34;httpstcozujjgzb0nc&#34;,&#34;httpstcozxumklka0c&#34;,&#34;httpstcozyeomwlbfs&#34;,&#34;httpstcozynfgsm1cl&#34;,&#34;hurt&#34;,&#34;ilovebitcoin&#34;,&#34;incorporate&#34;,&#34;india&#34;,&#34;industry&#34;,&#34;institutional&#34;,&#34;interest&#34;,&#34;intuittrading&#34;,&#34;investing&#34;,&#34;investors&#34;,&#34;issues&#34;,&#34;jesus&#34;,&#34;keep&#34;,&#34;king&#34;,&#34;korea&#34;,&#34;larceny&#34;,&#34;latte&#34;,&#34;launching&#34;,&#34;learn&#34;,&#34;ledger&#34;,&#34;lets&#34;,&#34;lighning&#34;,&#34;likely&#34;,&#34;link&#34;,&#34;loan&#34;,&#34;lol&#34;,&#34;lots&#34;,&#34;love&#34;,&#34;ltc&#34;,&#34;machinelearning&#34;,&#34;maga&#34;,&#34;make&#34;,&#34;making&#34;,&#34;malta&#34;,&#34;may&#34;,&#34;meet&#34;,&#34;might&#34;,&#34;million&#34;,&#34;mimblewimble&#34;,&#34;mira&#34;,&#34;misconceptions&#34;,&#34;missing&#34;,&#34;mission&#34;,&#34;mobilego&#34;,&#34;montana&#34;,&#34;monthly&#34;,&#34;moon&#34;,&#34;mooncashfaucet&#34;,&#34;movement&#34;,&#34;mumbai&#34;,&#34;need&#34;,&#34;needs&#34;,&#34;netherlands&#34;,&#34;network&#34;,&#34;never&#34;,&#34;noon&#34;,&#34;oct31&#34;,&#34;office&#34;,&#34;officials&#34;,&#34;open&#34;,&#34;opinion&#34;,&#34;order&#34;,&#34;overtak&#34;,&#34;pacific&#34;,&#34;part&#34;,&#34;payout&#34;,&#34;petro&#34;,&#34;physical&#34;,&#34;pinch&#34;,&#34;planning&#34;,&#34;plant&#34;,&#34;play&#34;,&#34;polny&#34;,&#34;positive&#34;,&#34;possibilities&#34;,&#34;pow&#34;,&#34;powered&#34;,&#34;practical&#34;,&#34;pro&#34;,&#34;projects&#34;,&#34;proof&#34;,&#34;provides&#34;,&#34;ptc&#34;,&#34;pumpkin&#34;,&#34;purchase&#34;,&#34;qampa&#34;,&#34;qanon&#34;,&#34;quick&#34;,&#34;raspberrypi&#34;,&#34;reach&#34;,&#34;reactions&#34;,&#34;read&#34;,&#34;real&#34;,&#34;reality&#34;,&#34;record&#34;,&#34;red&#34;,&#34;redwave&#34;,&#34;referral&#34;,&#34;registration&#34;,&#34;researching&#34;,&#34;reserve&#34;,&#34;revoultion&#34;,&#34;ridiculous&#34;,&#34;riding&#34;,&#34;ripple&#34;,&#34;rises&#34;,&#34;road&#34;,&#34;rosecrypto&#34;,&#34;satoshilite&#34;,&#34;says&#34;,&#34;scheme&#34;,&#34;scholarship&#34;,&#34;season&#34;,&#34;seasons&#34;,&#34;secure&#34;,&#34;security&#34;,&#34;seen&#34;,&#34;selling&#34;,&#34;senator&#34;,&#34;september&#34;,&#34;services&#34;,&#34;settled&#34;,&#34;silver&#34;,&#34;since&#34;,&#34;small&#34;,&#34;solutions&#34;,&#34;soon&#34;,&#34;special&#34;,&#34;spice&#34;,&#34;splitting&#34;,&#34;springleap&#34;,&#34;start&#34;,&#34;started&#34;,&#34;startup&#34;,&#34;stay&#34;,&#34;stec&#34;,&#34;steemit&#34;,&#34;stocks&#34;,&#34;stores&#34;,&#34;strategy&#34;,&#34;street&#34;,&#34;students&#34;,&#34;suburb&#34;,&#34;suc&#34;,&#34;suggesting&#34;,&#34;swarm&#34;,&#34;syste&#34;,&#34;taiwan&#34;,&#34;talk&#34;,&#34;talking&#34;,&#34;tangible&#34;,&#34;tax&#34;,&#34;telling&#34;,&#34;testing&#34;,&#34;tether&#34;,&#34;thank&#34;,&#34;theory&#34;,&#34;thing&#34;,&#34;think&#34;,&#34;tippr&#34;,&#34;todays&#34;,&#34;total&#34;,&#34;trader&#34;,&#34;traffic&#34;,&#34;trezor&#34;,&#34;true&#34;,&#34;truly&#34;,&#34;trump&#34;,&#34;trump2020&#34;,&#34;tweet&#34;,&#34;twice&#34;,&#34;underestimate&#34;,&#34;unhappy&#34;,&#34;unit&#34;,&#34;university&#34;,&#34;unnecessary&#34;,&#34;untested&#34;,&#34;unveils&#34;,&#34;update&#34;,&#34;uptoken&#34;,&#34;usdt&#34;,&#34;use&#34;,&#34;users&#34;,&#34;vault&#34;,&#34;venezuelan&#34;,&#34;verge&#34;,&#34;video&#34;,&#34;views&#34;,&#34;virtual&#34;,&#34;visit&#34;,&#34;vote&#34;,&#34;wait&#34;,&#34;wall&#34;,&#34;warning&#34;,&#34;wars&#34;,&#34;watching&#34;,&#34;wave&#34;,&#34;whats&#34;,&#34;whole&#34;,&#34;win&#34;,&#34;wins&#34;,&#34;wolf&#34;,&#34;womenofcrypto&#34;,&#34;world&#34;,&#34;worldwide&#34;,&#34;worries&#34;,&#34;worth&#34;,&#34;wow&#34;,&#34;xbt&#34;,&#34;yahoofinance&#34;,&#34;yall&#34;,&#34;year&#34;,&#34;yet&#34;],&#34;freq&#34;:[11,10,10,9,9,8,8,8,8,7,7,7,7,7,7,7,7,7,6,6,6,6,6,6,6,6,6,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],&#34;size&#34;:[11,10,10,9,9,8,8,8,8,7,7,7,7,7,7,7,7,7,6,6,6,6,6,6,6,6,6,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},&#34;pars&#34;:{&#34;font&#34;:&#34;Open Sans&#34;,&#34;padding&#34;:5,&#34;rotmin&#34;:-30,&#34;rotmax&#34;:30,&#34;tooltip&#34;:false,&#34;rangesizefont&#34;:[10,90],&#34;sizescale&#34;:&#34;linear&#34;,&#34;colorscale&#34;:&#34;linear&#34;,&#34;spiral&#34;:&#34;archimedean&#34;,&#34;colors&#34;:null,&#34;every_word_has_own_color&#34;:false,&#34;missing_colors&#34;:true,&#34;label&#34;:null}},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
-&lt;p&gt;Ethereum&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ethereum_words &amp;lt;-  big_data_clean_2 %&amp;gt;%
-            filter(coin == &amp;quot;ethereum&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count))
+&lt;p&gt;Our objective for this project is to use a supervised fraud algorithm to build a fraud detection model that predicts product
+application fraud with high predictive accuracy. More precisely, we aim to find the top performing machine learning
+model that is able to predict the highest number of fraudulent cases with a low false positive rate.
+The report will present several classification machine learning techniques for fraud detection and their performances on
+our dataset, in complete detail such as Logistic Regression, Random Forests, Support Vector Machine, and Gradient
+Boosting Trees.&lt;/p&gt;
 
-set.seed(123)
-wordcloud(words = ethereum_words$words, freq = ethereum_words$words_count, min.freq = 10,
-          max.words=100, random.order=FALSE, rot.per=0.35, 
-          colors=brewer.pal(10, &amp;quot;Dark2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/twitter_sentiment_analysis_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Litecoin&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;litecoin_words &amp;lt;-  big_data_clean_2 %&amp;gt;%
-            filter(coin == &amp;quot;litecoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count))
+&lt;h5 id=&#34;key-findings&#34;&gt;Key Findings&lt;/h5&gt;
 
-set.seed(123)
-wordcloud(words = litecoin_words$words, freq = litecoin_words$words_count, min.freq = 10,
-          max.words=100, random.order=FALSE, rot.per=0.35, 
-          colors=brewer.pal(10, &amp;quot;Dark2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/twitter_sentiment_analysis_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;sentiment-analysis&#34; class=&#34;section level5&#34;&gt;
-&lt;h5&gt;Sentiment Analysis&lt;/h5&gt;
-&lt;p&gt;Bitcoin&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data_crypto_sentiment &amp;lt;- read.csv(&amp;quot;data_crypto_sentiment.csv&amp;quot;)
+&lt;p&gt;Here are the main key findings from building a Fraud Detection Model on the Applications dataset:&lt;/p&gt;
 
-plotly::ggplotly(data_crypto_sentiment %&amp;gt;%
-  filter(coin == &amp;quot;bitcoin&amp;quot; &amp;amp; !is.na(sentiment)) %&amp;gt;%
-  group_by(sentiment) %&amp;gt;%
-  summarize(count = n()) %&amp;gt;%
-  arrange(desc(count)) %&amp;gt;%
-  ggplot(aes( x = reorder(as.character(sentiment), count), y = count))+
-  geom_bar(stat = &amp;#39;identity&amp;#39;, fill = &amp;quot;#4271AE&amp;quot;)+
-  coord_flip()+
-  labs(title=&amp;#39;Bitcoin Sentiments&amp;#39;, x=&amp;#39;Sentiments&amp;#39;,y=&amp;#39;Sentiment Count&amp;#39;)+
-  theme_economist())&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;htmlwidget-2&#34; style=&#34;width:672px;height:480px;&#34; class=&#34;plotly html-widget&#34;&gt;&lt;/div&gt;
-&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-2&#34;&gt;{&#34;x&#34;:{&#34;data&#34;:[{&#34;orientation&#34;:&#34;h&#34;,&#34;width&#34;:[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999],&#34;base&#34;:[0,0,0,0,0,0,0,0,0,0,0,0,0,0],&#34;x&#34;:[0,1,3,6,7,8,11,11,13,16,21,25,56,82],&#34;y&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;text&#34;:[&#34;reorder(as.character(sentiment), count): superfluous&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): constraining&lt;br /&gt;count:  1&#34;,&#34;reorder(as.character(sentiment), count): litigious&lt;br /&gt;count:  3&#34;,&#34;reorder(as.character(sentiment), count): uncertainty&lt;br /&gt;count:  6&#34;,&#34;reorder(as.character(sentiment), count): disgust&lt;br /&gt;count:  7&#34;,&#34;reorder(as.character(sentiment), count): surprise&lt;br /&gt;count:  8&#34;,&#34;reorder(as.character(sentiment), count): anger&lt;br /&gt;count: 11&#34;,&#34;reorder(as.character(sentiment), count): sadness&lt;br /&gt;count: 11&#34;,&#34;reorder(as.character(sentiment), count): fear&lt;br /&gt;count: 13&#34;,&#34;reorder(as.character(sentiment), count): joy&lt;br /&gt;count: 16&#34;,&#34;reorder(as.character(sentiment), count): anticipation&lt;br /&gt;count: 21&#34;,&#34;reorder(as.character(sentiment), count): trust&lt;br /&gt;count: 25&#34;,&#34;reorder(as.character(sentiment), count): negative&lt;br /&gt;count: 56&#34;,&#34;reorder(as.character(sentiment), count): positive&lt;br /&gt;count: 82&#34;],&#34;type&#34;:&#34;bar&#34;,&#34;marker&#34;:{&#34;autocolorscale&#34;:false,&#34;color&#34;:&#34;rgba(66,113,174,1)&#34;,&#34;line&#34;:{&#34;width&#34;:1.88976377952756,&#34;color&#34;:&#34;transparent&#34;}},&#34;showlegend&#34;:false,&#34;xaxis&#34;:&#34;x&#34;,&#34;yaxis&#34;:&#34;y&#34;,&#34;hoverinfo&#34;:&#34;text&#34;,&#34;frame&#34;:null}],&#34;layout&#34;:{&#34;margin&#34;:{&#34;t&#34;:51.8655043586551,&#34;r&#34;:13.2835201328352,&#34;b&#34;:35.8655043586551,&#34;l&#34;:99.626400996264},&#34;plot_bgcolor&#34;:&#34;transparent&#34;,&#34;paper_bgcolor&#34;:&#34;rgba(213,228,235,1)&#34;,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;title&#34;:&#34;&lt;b&gt; Bitcoin Sentiments &lt;\/b&gt;&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:19.9252801992528},&#34;xaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[-4.1,86.1],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;0&#34;,&#34;20&#34;,&#34;40&#34;,&#34;60&#34;,&#34;80&#34;],&#34;tickvals&#34;:[0,20,40,60,80],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;0&#34;,&#34;20&#34;,&#34;40&#34;,&#34;60&#34;,&#34;80&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;outside&#34;,&#34;tickcolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0.603796369674327,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:true,&#34;linecolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;linewidth&#34;:0.483037095739462,&#34;showgrid&#34;:false,&#34;gridcolor&#34;:null,&#34;gridwidth&#34;:0,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;y&#34;,&#34;title&#34;:&#34;Sentiment Count&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;yaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[0.4,14.6],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;superfluous&#34;,&#34;constraining&#34;,&#34;litigious&#34;,&#34;uncertainty&#34;,&#34;disgust&#34;,&#34;surprise&#34;,&#34;anger&#34;,&#34;sadness&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;anticipation&#34;,&#34;trust&#34;,&#34;negative&#34;,&#34;positive&#34;],&#34;tickvals&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;superfluous&#34;,&#34;constraining&#34;,&#34;litigious&#34;,&#34;uncertainty&#34;,&#34;disgust&#34;,&#34;surprise&#34;,&#34;anger&#34;,&#34;sadness&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;anticipation&#34;,&#34;trust&#34;,&#34;negative&#34;,&#34;positive&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;&#34;,&#34;tickcolor&#34;:null,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:false,&#34;linecolor&#34;:null,&#34;linewidth&#34;:0,&#34;showgrid&#34;:true,&#34;gridcolor&#34;:&#34;rgba(255,255,255,1)&#34;,&#34;gridwidth&#34;:1.05664364693007,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;x&#34;,&#34;title&#34;:&#34;Sentiments&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;shapes&#34;:[{&#34;type&#34;:&#34;rect&#34;,&#34;fillcolor&#34;:null,&#34;line&#34;:{&#34;color&#34;:null,&#34;width&#34;:0,&#34;linetype&#34;:[]},&#34;yref&#34;:&#34;paper&#34;,&#34;xref&#34;:&#34;paper&#34;,&#34;x0&#34;:0,&#34;x1&#34;:1,&#34;y0&#34;:0,&#34;y1&#34;:1}],&#34;showlegend&#34;:false,&#34;legend&#34;:{&#34;bgcolor&#34;:&#34;transparent&#34;,&#34;bordercolor&#34;:&#34;transparent&#34;,&#34;borderwidth&#34;:1.71796707229778,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:16.604400166044}},&#34;hovermode&#34;:&#34;closest&#34;,&#34;barmode&#34;:&#34;relative&#34;},&#34;config&#34;:{&#34;doubleClick&#34;:&#34;reset&#34;,&#34;modeBarButtonsToAdd&#34;:[{&#34;name&#34;:&#34;Collaborate&#34;,&#34;icon&#34;:{&#34;width&#34;:1000,&#34;ascent&#34;:500,&#34;descent&#34;:-50,&#34;path&#34;:&#34;M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z&#34;},&#34;click&#34;:&#34;function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == &#39;?viewer_pane=1&#39;) {\n          alert(&#39;To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;);\n        } else {\n          window.open(&#39;https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;, &#39;_blank&#39;);\n        }\n      }&#34;}],&#34;cloud&#34;:false},&#34;source&#34;:&#34;A&#34;,&#34;attrs&#34;:{&#34;1b013f187089&#34;:{&#34;x&#34;:{},&#34;y&#34;:{},&#34;type&#34;:&#34;bar&#34;}},&#34;cur_data&#34;:&#34;1b013f187089&#34;,&#34;visdat&#34;:{&#34;1b013f187089&#34;:[&#34;function (y) &#34;,&#34;x&#34;]},&#34;highlight&#34;:{&#34;on&#34;:&#34;plotly_click&#34;,&#34;persistent&#34;:false,&#34;dynamic&#34;:false,&#34;selectize&#34;:false,&#34;opacityDim&#34;:0.2,&#34;selected&#34;:{&#34;opacity&#34;:1},&#34;debounce&#34;:0},&#34;base_url&#34;:&#34;https://plot.ly&#34;},&#34;evals&#34;:[&#34;config.modeBarButtonsToAdd.0.click&#34;],&#34;jsHooks&#34;:[]}&lt;/script&gt;
-&lt;p&gt;Ethereum&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plotly::ggplotly(data_crypto_sentiment %&amp;gt;%
-  filter(coin == &amp;quot;ethereum&amp;quot; &amp;amp; !is.na(sentiment)) %&amp;gt;%
-  group_by(sentiment) %&amp;gt;%
-  summarize(count = n()) %&amp;gt;%
-  arrange(desc(count)) %&amp;gt;%
-  ggplot(aes( x = reorder(as.character(sentiment), count), y = count))+
-  geom_bar(stat = &amp;#39;identity&amp;#39;, fill = &amp;quot;#4271AE&amp;quot;)+
-  coord_flip()+
-  labs(title=&amp;#39;Ethereum Sentiments&amp;#39;, x=&amp;#39;Sentiments&amp;#39;,y=&amp;#39;Sentiment Count&amp;#39;)+
-  theme_economist())&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;htmlwidget-3&#34; style=&#34;width:672px;height:480px;&#34; class=&#34;plotly html-widget&#34;&gt;&lt;/div&gt;
-&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-3&#34;&gt;{&#34;x&#34;:{&#34;data&#34;:[{&#34;orientation&#34;:&#34;h&#34;,&#34;width&#34;:[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999],&#34;base&#34;:[0,0,0,0,0,0,0,0,0,0,0,0,0,0],&#34;x&#34;:[0,1,3,4,4,6,6,6,8,15,25,26,27,92],&#34;y&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;text&#34;:[&#34;reorder(as.character(sentiment), count): superfluous&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): constraining&lt;br /&gt;count:  1&#34;,&#34;reorder(as.character(sentiment), count): litigious&lt;br /&gt;count:  3&#34;,&#34;reorder(as.character(sentiment), count): disgust&lt;br /&gt;count:  4&#34;,&#34;reorder(as.character(sentiment), count): uncertainty&lt;br /&gt;count:  4&#34;,&#34;reorder(as.character(sentiment), count): anger&lt;br /&gt;count:  6&#34;,&#34;reorder(as.character(sentiment), count): sadness&lt;br /&gt;count:  6&#34;,&#34;reorder(as.character(sentiment), count): surprise&lt;br /&gt;count:  6&#34;,&#34;reorder(as.character(sentiment), count): fear&lt;br /&gt;count:  8&#34;,&#34;reorder(as.character(sentiment), count): joy&lt;br /&gt;count: 15&#34;,&#34;reorder(as.character(sentiment), count): negative&lt;br /&gt;count: 25&#34;,&#34;reorder(as.character(sentiment), count): trust&lt;br /&gt;count: 26&#34;,&#34;reorder(as.character(sentiment), count): anticipation&lt;br /&gt;count: 27&#34;,&#34;reorder(as.character(sentiment), count): positive&lt;br /&gt;count: 92&#34;],&#34;type&#34;:&#34;bar&#34;,&#34;marker&#34;:{&#34;autocolorscale&#34;:false,&#34;color&#34;:&#34;rgba(66,113,174,1)&#34;,&#34;line&#34;:{&#34;width&#34;:1.88976377952756,&#34;color&#34;:&#34;transparent&#34;}},&#34;showlegend&#34;:false,&#34;xaxis&#34;:&#34;x&#34;,&#34;yaxis&#34;:&#34;y&#34;,&#34;hoverinfo&#34;:&#34;text&#34;,&#34;frame&#34;:null}],&#34;layout&#34;:{&#34;margin&#34;:{&#34;t&#34;:51.8655043586551,&#34;r&#34;:13.2835201328352,&#34;b&#34;:35.8655043586551,&#34;l&#34;:99.626400996264},&#34;plot_bgcolor&#34;:&#34;transparent&#34;,&#34;paper_bgcolor&#34;:&#34;rgba(213,228,235,1)&#34;,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;title&#34;:&#34;&lt;b&gt; Ethereum Sentiments &lt;\/b&gt;&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:19.9252801992528},&#34;xaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[-4.6,96.6],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;0&#34;,&#34;25&#34;,&#34;50&#34;,&#34;75&#34;],&#34;tickvals&#34;:[0,25,50,75],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;0&#34;,&#34;25&#34;,&#34;50&#34;,&#34;75&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;outside&#34;,&#34;tickcolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0.603796369674327,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:true,&#34;linecolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;linewidth&#34;:0.483037095739462,&#34;showgrid&#34;:false,&#34;gridcolor&#34;:null,&#34;gridwidth&#34;:0,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;y&#34;,&#34;title&#34;:&#34;Sentiment Count&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;yaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[0.4,14.6],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;superfluous&#34;,&#34;constraining&#34;,&#34;litigious&#34;,&#34;disgust&#34;,&#34;uncertainty&#34;,&#34;anger&#34;,&#34;sadness&#34;,&#34;surprise&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;negative&#34;,&#34;trust&#34;,&#34;anticipation&#34;,&#34;positive&#34;],&#34;tickvals&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;superfluous&#34;,&#34;constraining&#34;,&#34;litigious&#34;,&#34;disgust&#34;,&#34;uncertainty&#34;,&#34;anger&#34;,&#34;sadness&#34;,&#34;surprise&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;negative&#34;,&#34;trust&#34;,&#34;anticipation&#34;,&#34;positive&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;&#34;,&#34;tickcolor&#34;:null,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:false,&#34;linecolor&#34;:null,&#34;linewidth&#34;:0,&#34;showgrid&#34;:true,&#34;gridcolor&#34;:&#34;rgba(255,255,255,1)&#34;,&#34;gridwidth&#34;:1.05664364693007,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;x&#34;,&#34;title&#34;:&#34;Sentiments&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;shapes&#34;:[{&#34;type&#34;:&#34;rect&#34;,&#34;fillcolor&#34;:null,&#34;line&#34;:{&#34;color&#34;:null,&#34;width&#34;:0,&#34;linetype&#34;:[]},&#34;yref&#34;:&#34;paper&#34;,&#34;xref&#34;:&#34;paper&#34;,&#34;x0&#34;:0,&#34;x1&#34;:1,&#34;y0&#34;:0,&#34;y1&#34;:1}],&#34;showlegend&#34;:false,&#34;legend&#34;:{&#34;bgcolor&#34;:&#34;transparent&#34;,&#34;bordercolor&#34;:&#34;transparent&#34;,&#34;borderwidth&#34;:1.71796707229778,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:16.604400166044}},&#34;hovermode&#34;:&#34;closest&#34;,&#34;barmode&#34;:&#34;relative&#34;},&#34;config&#34;:{&#34;doubleClick&#34;:&#34;reset&#34;,&#34;modeBarButtonsToAdd&#34;:[{&#34;name&#34;:&#34;Collaborate&#34;,&#34;icon&#34;:{&#34;width&#34;:1000,&#34;ascent&#34;:500,&#34;descent&#34;:-50,&#34;path&#34;:&#34;M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z&#34;},&#34;click&#34;:&#34;function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == &#39;?viewer_pane=1&#39;) {\n          alert(&#39;To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;);\n        } else {\n          window.open(&#39;https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;, &#39;_blank&#39;);\n        }\n      }&#34;}],&#34;cloud&#34;:false},&#34;source&#34;:&#34;A&#34;,&#34;attrs&#34;:{&#34;1b0136afd43c&#34;:{&#34;x&#34;:{},&#34;y&#34;:{},&#34;type&#34;:&#34;bar&#34;}},&#34;cur_data&#34;:&#34;1b0136afd43c&#34;,&#34;visdat&#34;:{&#34;1b0136afd43c&#34;:[&#34;function (y) &#34;,&#34;x&#34;]},&#34;highlight&#34;:{&#34;on&#34;:&#34;plotly_click&#34;,&#34;persistent&#34;:false,&#34;dynamic&#34;:false,&#34;selectize&#34;:false,&#34;opacityDim&#34;:0.2,&#34;selected&#34;:{&#34;opacity&#34;:1},&#34;debounce&#34;:0},&#34;base_url&#34;:&#34;https://plot.ly&#34;},&#34;evals&#34;:[&#34;config.modeBarButtonsToAdd.0.click&#34;],&#34;jsHooks&#34;:[]}&lt;/script&gt;
-&lt;p&gt;Litecoin&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plotly::ggplotly(data_crypto_sentiment %&amp;gt;%
-  filter(coin == &amp;quot;litecoin&amp;quot; &amp;amp; !is.na(sentiment)) %&amp;gt;%
-  group_by(sentiment) %&amp;gt;%
-  summarize(count = n()) %&amp;gt;%
-  arrange(desc(count)) %&amp;gt;%
-  ggplot(aes( x = reorder(as.character(sentiment), count), y = count))+
-  geom_bar(stat = &amp;#39;identity&amp;#39;, fill = &amp;quot;#4271AE&amp;quot;)+
-  coord_flip()+
-  labs(title=&amp;#39;Litecoin Sentiments&amp;#39;, x=&amp;#39;Sentiments&amp;#39;,y=&amp;#39;Sentiment Count&amp;#39;)+
-  theme_economist())&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;htmlwidget-4&#34; style=&#34;width:672px;height:480px;&#34; class=&#34;plotly html-widget&#34;&gt;&lt;/div&gt;
-&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-4&#34;&gt;{&#34;x&#34;:{&#34;data&#34;:[{&#34;orientation&#34;:&#34;h&#34;,&#34;width&#34;:[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999,0.899999999999999],&#34;base&#34;:[0,0,0,0,0,0,0,0,0,0,0,0,0,0],&#34;x&#34;:[0,0,0,2,5,5,8,11,12,12,18,24,25,80],&#34;y&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;text&#34;:[&#34;reorder(as.character(sentiment), count): constraining&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): litigious&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): superfluous&lt;br /&gt;count:  0&#34;,&#34;reorder(as.character(sentiment), count): uncertainty&lt;br /&gt;count:  2&#34;,&#34;reorder(as.character(sentiment), count): disgust&lt;br /&gt;count:  5&#34;,&#34;reorder(as.character(sentiment), count): sadness&lt;br /&gt;count:  5&#34;,&#34;reorder(as.character(sentiment), count): surprise&lt;br /&gt;count:  8&#34;,&#34;reorder(as.character(sentiment), count): anger&lt;br /&gt;count: 11&#34;,&#34;reorder(as.character(sentiment), count): fear&lt;br /&gt;count: 12&#34;,&#34;reorder(as.character(sentiment), count): joy&lt;br /&gt;count: 12&#34;,&#34;reorder(as.character(sentiment), count): trust&lt;br /&gt;count: 18&#34;,&#34;reorder(as.character(sentiment), count): anticipation&lt;br /&gt;count: 24&#34;,&#34;reorder(as.character(sentiment), count): negative&lt;br /&gt;count: 25&#34;,&#34;reorder(as.character(sentiment), count): positive&lt;br /&gt;count: 80&#34;],&#34;type&#34;:&#34;bar&#34;,&#34;marker&#34;:{&#34;autocolorscale&#34;:false,&#34;color&#34;:&#34;rgba(66,113,174,1)&#34;,&#34;line&#34;:{&#34;width&#34;:1.88976377952756,&#34;color&#34;:&#34;transparent&#34;}},&#34;showlegend&#34;:false,&#34;xaxis&#34;:&#34;x&#34;,&#34;yaxis&#34;:&#34;y&#34;,&#34;hoverinfo&#34;:&#34;text&#34;,&#34;frame&#34;:null}],&#34;layout&#34;:{&#34;margin&#34;:{&#34;t&#34;:51.8655043586551,&#34;r&#34;:13.2835201328352,&#34;b&#34;:35.8655043586551,&#34;l&#34;:99.626400996264},&#34;plot_bgcolor&#34;:&#34;transparent&#34;,&#34;paper_bgcolor&#34;:&#34;rgba(213,228,235,1)&#34;,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;title&#34;:&#34;&lt;b&gt; Litecoin Sentiments &lt;\/b&gt;&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:19.9252801992528},&#34;xaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[-4,84],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;0&#34;,&#34;20&#34;,&#34;40&#34;,&#34;60&#34;,&#34;80&#34;],&#34;tickvals&#34;:[0,20,40,60,80],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;0&#34;,&#34;20&#34;,&#34;40&#34;,&#34;60&#34;,&#34;80&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;outside&#34;,&#34;tickcolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0.603796369674327,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:true,&#34;linecolor&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;linewidth&#34;:0.483037095739462,&#34;showgrid&#34;:false,&#34;gridcolor&#34;:null,&#34;gridwidth&#34;:0,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;y&#34;,&#34;title&#34;:&#34;Sentiment Count&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;yaxis&#34;:{&#34;domain&#34;:[0,1],&#34;automargin&#34;:true,&#34;type&#34;:&#34;linear&#34;,&#34;autorange&#34;:false,&#34;range&#34;:[0.4,14.6],&#34;tickmode&#34;:&#34;array&#34;,&#34;ticktext&#34;:[&#34;constraining&#34;,&#34;litigious&#34;,&#34;superfluous&#34;,&#34;uncertainty&#34;,&#34;disgust&#34;,&#34;sadness&#34;,&#34;surprise&#34;,&#34;anger&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;trust&#34;,&#34;anticipation&#34;,&#34;negative&#34;,&#34;positive&#34;],&#34;tickvals&#34;:[1,2,3,4,5,6,7,8,9,10,11,12,13,14],&#34;categoryorder&#34;:&#34;array&#34;,&#34;categoryarray&#34;:[&#34;constraining&#34;,&#34;litigious&#34;,&#34;superfluous&#34;,&#34;uncertainty&#34;,&#34;disgust&#34;,&#34;sadness&#34;,&#34;surprise&#34;,&#34;anger&#34;,&#34;fear&#34;,&#34;joy&#34;,&#34;trust&#34;,&#34;anticipation&#34;,&#34;negative&#34;,&#34;positive&#34;],&#34;nticks&#34;:null,&#34;ticks&#34;:&#34;&#34;,&#34;tickcolor&#34;:null,&#34;ticklen&#34;:-6.6417600664176,&#34;tickwidth&#34;:0,&#34;showticklabels&#34;:true,&#34;tickfont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;tickangle&#34;:-0,&#34;showline&#34;:false,&#34;linecolor&#34;:null,&#34;linewidth&#34;:0,&#34;showgrid&#34;:true,&#34;gridcolor&#34;:&#34;rgba(255,255,255,1)&#34;,&#34;gridwidth&#34;:1.05664364693007,&#34;zeroline&#34;:false,&#34;anchor&#34;:&#34;x&#34;,&#34;title&#34;:&#34;Sentiments&#34;,&#34;titlefont&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:13.2835201328352},&#34;hoverformat&#34;:&#34;.2f&#34;},&#34;shapes&#34;:[{&#34;type&#34;:&#34;rect&#34;,&#34;fillcolor&#34;:null,&#34;line&#34;:{&#34;color&#34;:null,&#34;width&#34;:0,&#34;linetype&#34;:[]},&#34;yref&#34;:&#34;paper&#34;,&#34;xref&#34;:&#34;paper&#34;,&#34;x0&#34;:0,&#34;x1&#34;:1,&#34;y0&#34;:0,&#34;y1&#34;:1}],&#34;showlegend&#34;:false,&#34;legend&#34;:{&#34;bgcolor&#34;:&#34;transparent&#34;,&#34;bordercolor&#34;:&#34;transparent&#34;,&#34;borderwidth&#34;:1.71796707229778,&#34;font&#34;:{&#34;color&#34;:&#34;rgba(0,0,0,1)&#34;,&#34;family&#34;:&#34;sans&#34;,&#34;size&#34;:16.604400166044}},&#34;hovermode&#34;:&#34;closest&#34;,&#34;barmode&#34;:&#34;relative&#34;},&#34;config&#34;:{&#34;doubleClick&#34;:&#34;reset&#34;,&#34;modeBarButtonsToAdd&#34;:[{&#34;name&#34;:&#34;Collaborate&#34;,&#34;icon&#34;:{&#34;width&#34;:1000,&#34;ascent&#34;:500,&#34;descent&#34;:-50,&#34;path&#34;:&#34;M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z&#34;},&#34;click&#34;:&#34;function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == &#39;?viewer_pane=1&#39;) {\n          alert(&#39;To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;);\n        } else {\n          window.open(&#39;https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html&#39;, &#39;_blank&#39;);\n        }\n      }&#34;}],&#34;cloud&#34;:false},&#34;source&#34;:&#34;A&#34;,&#34;attrs&#34;:{&#34;1b013bd2f878&#34;:{&#34;x&#34;:{},&#34;y&#34;:{},&#34;type&#34;:&#34;bar&#34;}},&#34;cur_data&#34;:&#34;1b013bd2f878&#34;,&#34;visdat&#34;:{&#34;1b013bd2f878&#34;:[&#34;function (y) &#34;,&#34;x&#34;]},&#34;highlight&#34;:{&#34;on&#34;:&#34;plotly_click&#34;,&#34;persistent&#34;:false,&#34;dynamic&#34;:false,&#34;selectize&#34;:false,&#34;opacityDim&#34;:0.2,&#34;selected&#34;:{&#34;opacity&#34;:1},&#34;debounce&#34;:0},&#34;base_url&#34;:&#34;https://plot.ly&#34;},&#34;evals&#34;:[&#34;config.modeBarButtonsToAdd.0.click&#34;],&#34;jsHooks&#34;:[]}&lt;/script&gt;
-&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;The Gradient Boosting Trees method yielded the best Fraud Detection model at 10% penetration on the OOT (Out
+of Time) dataset with a FDR (Fraud Detection Rate) of 13.02% including a FDR of 12.50% on the testing dataset&lt;/li&gt;
+&lt;li&gt;The Support Vector Machine Method yielded the lowest Fraud Detection Rate (FDR) at 10% penetration on the
+OOT (Out of Time) dataset with a FDR (Fraud Detection Rate) of 11.81% including a FDR of 11.01% on the testing
+dataset&lt;/li&gt;
+&lt;li&gt;Overall, Gradient Boosting Trees and Random Forest Models both demonstrated relatively high predictive
+performance, with the highest predictive power in their respective segments&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;/project/fraud_detection_models.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;/project/fraud_detection_table.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://drive.google.com/open?id=1GA_gXqiBCMlOUP8eLz_TatD9mEqLREGM&#34; download&gt;Click to Download the full report&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Fraud Analytics: Fraud Score Calculation</title>
+      <link>/project/deep-learning/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      
+      <guid>/project/deep-learning/</guid>
+      <description>
+
+&lt;h5 id=&#34;description&#34;&gt;Description&lt;/h5&gt;
+
+&lt;p&gt;This report provides a detailed analysis of ‘New York City Property Tax Valuation Data’ and also aims at
+identifying potential fraudulent records from the data set using unsupervised machine learning methods.
+The programming tools used for Data Cleaning were performed on Microsoft Excel and R. The original
+dataset contains unique records of more than 1 million properties across the state of New York with 30
+different fields, both numerical and categorical. Necessary feature analysis include:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Data Understanding and Data Cleaning (estimating missing values of each fields)&lt;/li&gt;
+&lt;li&gt;Data Modeling (creating expert variables) and Data Evaluation&lt;/li&gt;
+&lt;li&gt;Fraud Score Calculation (Heuristic Algorithm and Autoencoder)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&#34;project-goal&#34;&gt;Project Goal&lt;/h5&gt;
+
+&lt;p&gt;Our objective for this project is to use machine learning algorithms such as Autoencoder and Heuristic
+Algorithms and calculate a fraud score for each of the New York Property data records to analyze
+anomalies for potential fraud detection. By applying both of the unsupervised machine learning
+methods, records with high scores show to be potentially fraudulent. The report will explain each step in
+complete detail.&lt;/p&gt;
+
+&lt;h5 id=&#34;key-findings&#34;&gt;Key Findings&lt;/h5&gt;
+
+&lt;p&gt;The two fraud detection algorithms we used, Heuristic and Autoencoder-Based Anomaly Detection, had
+a considerably high overlap matching percentage among the top 1% of all records:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Missing values were properly filled using reasonable data cleaning methodology.&lt;/li&gt;
+&lt;li&gt;The 51 expert variables were carefully crafted to perform PCA analysis.&lt;/li&gt;
+&lt;li&gt;After normalizing the fraud scores and visualizing the scores, we found both score distributions
+to be right skewed.&lt;/li&gt;
+&lt;li&gt;Among the top 10 highest fraud score records, anomalies were found in several fields.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://drive.google.com/open?id=1-UvdR-EvZEsEr-Fjv4qaMBiuqFKvYwbq&#34; download&gt;Click to Download the full report&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Homeless Geospatial Visualization Dashboard with Shiny</title>
+      <link>/project/homeless_project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      
+      <guid>/project/homeless_project/</guid>
+      <description>
+
+&lt;h5 id=&#34;introduction&#34;&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;Homelessness is soaring in Los Angeles and is a severe issue that is a part of everyday life.
+Our objective for this project:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Determining the need, demand and potential effects of different strategies for homeless intervention.&lt;/li&gt;
+&lt;li&gt;Identifying the areas with high-concentrations of unsheltered homelessness, crime incidents and high danger areas for the homeless community in order to help address the homelessness in full scope, while prioritizing service delivery needs&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In order to gain insight on homelessness:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We cleaned the data and used geospatial analysis to create an online mapping application.&lt;/li&gt;
+&lt;li&gt;This online mapping tool helped us evaluate the effectiveness of existing and potential homelessness interventions, functioned as a framework to determine fast delivery alternatives as well as helping us analyze data in full-scope and allow the rapid deployment of resources and services.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;/project/data_analysis_homeless.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;shiny-application&#34;&gt;Shiny Application&lt;/h5&gt;
+
+&lt;p&gt;&lt;img src=&#34;/project/homeless_shiny2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The Interactive Map displays the city of Los Angeles and its homeless population in an interactive map. The collapsable Map Controls drop down has the following features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Change the homeless measure distribution by either Census Tract or Communities&lt;/li&gt;
+&lt;li&gt;Filter the homeless population by year and measure&lt;/li&gt;
+&lt;li&gt;Filter the Crime counts and locations by time of day, day of the week, and month of the year&lt;/li&gt;
+&lt;li&gt;Filter the Call counts and locations by time of day, day of the week, and month of the year&lt;/li&gt;
+&lt;li&gt;Note that the 24 hour day has been split into 4 buckets:
+
+&lt;ul&gt;
+&lt;li&gt;Morning: 12:00 AM to 6:00 AM&lt;/li&gt;
+&lt;li&gt;Afternoon: 6:00 AM to 12:00 PM&lt;/li&gt;
+&lt;li&gt;Evening: 12:00 PM to 6:00 PM&lt;/li&gt;
+&lt;li&gt;Night: 6:00 PM to 12:00 AM&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;As well, above the legend in the bottom right corner, the user can select the different layers to display: Homeless Measure, Shelters, Crimes, and/or 311 calls.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;/project/homeless_shiny.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The Crimes and Calls tab displays a plot of the distribution of 311 calls or crime counts across the week and then also buckets them into the time of day following the above mentioned splits. Crimes can be further filtered based on the type of crime from the drop down menu on the left. The Homeless Comparison tab displays the 2017 and 2016 homeless measures side by side to give a quick visual clue into the year over year homeless distribution change across the city of Los Angeles. Similar to the interactive map, the plot can be changed between viewing census tracts or communities. In addition, the same homeless measure filters can be applied, such as viewing the Total Homeless or Total Unsheltered distributions.&lt;/p&gt;
+
+&lt;h5 id=&#34;conclusion-and-key-findings&#34;&gt;Conclusion and Key Findings&lt;/h5&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We analyzed and visualized the trend of homelessness and associated crimes with the merged dataset by census tract:&lt;/li&gt;
+&lt;li&gt;We then Calculated the correlation between the homeless density and 311 calls
+
+&lt;ul&gt;
+&lt;li&gt;We observed a high correlation between density and crimes counts which raised the question that whether high crime rates were a threat to the homeless population or were the homeless causing these crimes&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Analyzed the distribution of crimes and 311 calls across time&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Number of 311 calls was the highest on Tuesday and during the afternoon hours&lt;/li&gt;
+&lt;li&gt;Crime rate is highest on Saturday afternoon, followed by Tuesday evening and Sunday afternoon and evening.&lt;/li&gt;
+&lt;li&gt;The most frequent type of crime is Assault on Saturday afternoon
+&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Used our Shiny Dashboard to understand which factors could be significant for the unsheltered homeless.
+Skid row being at the top even though it has the largest number of shelter counts. Worth noting that calls coming from that area are comparatively quite low and it experiences high crime counts as well.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&#34;recommendations&#34;&gt;Recommendations:&lt;/h5&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Investigate and access to homeless satisfaction in shelters&lt;/li&gt;
+&lt;li&gt;Analyze average age of homeless in shelters to estimate the average age of the total homeless population per census tract. By doing so, we can have then use this data to implement better strategies and procedures to help homelessness.&lt;/li&gt;
+&lt;li&gt;Collect more data from successful project to support the decreasing rate of unsheltered homeless.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://drive.google.com/open?id=1kcoOuE3aUxqVuvuqiLqzP1tGT6rm5nnk&#34; download&gt;Click to Download the full presentation&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Optimizing Course Scheduling</title>
+      <link>/project/example-external-project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      
+      <guid>/project/example-external-project/</guid>
+      <description>
+
+&lt;h5 id=&#34;executive-summary&#34;&gt;Executive Summary&lt;/h5&gt;
+
+&lt;p&gt;For several universities across the world, the implementation of a systematic approach
+to course scheduling remains a problem. Discrete optimization approaches have been
+used to solve the problem independently at such institutions, however owing to the
+complex nature of the problem compounded by the viewpoints of various
+stakeholders, a universal “cookie-cutter” solution does not exist. There are 7
+departments in the Marshall School of Business at USC, and course scheduling is
+currently performed by reusing the course schedule from the previous year as closely
+as possible and manually implementing a series of reforms to improve efficiency and
+transparency. The current process assigns over 400 courses into 45 schedulable
+rooms at 42 different times. However, the schedules produced by the current process
+are not always transparent and efficient. Additionally, sections are scheduled and
+de-scheduled multiple times during the course allotment process which makes greedy
+approaches to the allocation problem inefficient.&lt;/p&gt;
+
+&lt;p&gt;Our solution to the problem involves the creation of a tractable MIP-based allocation
+tool that equitably assigns departments to classroom-timeslots. An algorithm
+developed in-house generates classroom-timeslot preference scores for each
+department based on survey results, and every run of the allocation tool outputs
+candidate sets of classroom-timeslots for each department. The size of the candidate
+sets is dependent upon a model-tuning parameter that controls the greediness of the
+allocation approach. This grants a greater degree of flexibility in course-scheduling and
+ensures that a certain quantity of classroom-timeslots of each category are available
+for the next (potential) run of the allocation tool to assign the remaining sections. The
+focus of this report is to describe the functioning of the tool, and the business value it
+offers to the administrative wing of the Marshall School of Business.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;/project/course_formula.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In the first step of the report, we propose a precise and high-level explanation on how
+the application of Mixed Integer Programming can be used to solve the course
+scheduling problem. In the second step of the report, we formulate a Mixed Integer
+Program by creating the input and output data, the decision variables, the objective
+function and the constraints. We conclude with a description of the output from one
+run of the model, and why the model makes sense and is easily implementable.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;/project/course_process.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://drive.google.com/open?id=115TjqrvSDv8hPvKhm-iOd1-nWNCgRRGw&#34; download&gt;Click to Download the full report&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>A Person Re-Identification System For Mobile Devices</title>
+      <link>/publication/person-re-identification/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 -0700</pubDate>
+      
+      <guid>/publication/person-re-identification/</guid>
+      <description>&lt;p&gt;More detail can easily be written here using &lt;em&gt;Markdown&lt;/em&gt; and $\rm \LaTeX$ math code.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Mobile visual clothing search</title>
+      <link>/publication/clothing-search/</link>
+      <pubDate>Mon, 01 Jul 2013 00:00:00 -0700</pubDate>
+      
+      <guid>/publication/clothing-search/</guid>
+      <description>&lt;p&gt;More detail can easily be written here using &lt;em&gt;Markdown&lt;/em&gt; and $\rm \LaTeX$ math code.&lt;/p&gt;
 </description>
     </item>
     

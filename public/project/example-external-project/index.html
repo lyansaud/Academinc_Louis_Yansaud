@@ -321,16 +321,18 @@ de-scheduled multiple times during the course allotment process which makes gree
 approaches to the allocation problem inefficient.</p>
 
 <p>Our solution to the problem involves the creation of a tractable MIP-based allocation
-tool that equitably assigns departments to classroom-timeslots. An algorithm [1]
+tool that equitably assigns departments to classroom-timeslots. An algorithm
 developed in-house generates classroom-timeslot preference scores for each
-department based on survey results [2] , and every run of the allocation tool outputs
+department based on survey results, and every run of the allocation tool outputs
 candidate sets of classroom-timeslots for each department. The size of the candidate
 sets is dependent upon a model-tuning parameter that controls the greediness of the
 allocation approach. This grants a greater degree of flexibility in course-scheduling and
-ensures that a certain quantity of classroom-timeslots of each category [3] are available
+ensures that a certain quantity of classroom-timeslots of each category are available
 for the next (potential) run of the allocation tool to assign the remaining sections. The
 focus of this report is to describe the functioning of the tool, and the business value it
 offers to the administrative wing of the Marshall School of Business.</p>
+
+<p><img src="/project/course_formula.png" width="672" /></p>
 
 <p>In the first step of the report, we propose a precise and high-level explanation on how
 the application of Mixed Integer Programming can be used to solve the course
@@ -338,6 +340,8 @@ scheduling problem. In the second step of the report, we formulate a Mixed Integ
 Program by creating the input and output data, the decision variables, the objective
 function and the constraints. We conclude with a description of the output from one
 run of the model, and why the model makes sense and is easily implementable.</p>
+
+<p><img src="/project/course_process.png" width="672" /></p>
 
 <p><a href="https://drive.google.com/open?id=115TjqrvSDv8hPvKhm-iOd1-nWNCgRRGw" download>Click to Download the full report</a></p>
 

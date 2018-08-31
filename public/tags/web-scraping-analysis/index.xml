@@ -7,6 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Mon, 20 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/web-scraping-analysis/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +15,7 @@
     <item>
       <title>Twitter Sentiment Analysis</title>
       <link>/post/twitter_sentiment_analysis/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/twitter_sentiment_analysis/</guid>
       <description>From my previous post, I first performed extensive data cleaning in order to analyze the sentiment of each individual cryptocurrency. Here is the result of my analysis.

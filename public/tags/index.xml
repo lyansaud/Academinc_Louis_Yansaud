@@ -24,9 +24,18 @@
     <item>
       <title>Data Analysis</title>
       <link>/tags/data-analysis/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 20 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/data-analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Geospatial Visualization</title>
+      <link>/tags/geospatial-visualization/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      
+      <guid>/tags/geospatial-visualization/</guid>
       <description></description>
     </item>
     
@@ -42,7 +51,7 @@
     <item>
       <title>R Markdown</title>
       <link>/tags/r-markdown/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/r-markdown/</guid>
       <description></description>
@@ -51,7 +60,7 @@
     <item>
       <title>Sentiment Analysis</title>
       <link>/tags/sentiment-analysis/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/sentiment-analysis/</guid>
       <description></description>
@@ -60,7 +69,7 @@
     <item>
       <title>Supervised Machine Learning</title>
       <link>/tags/supervised-machine-learning/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      <pubDate>Sat, 20 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/supervised-machine-learning/</guid>
       <description></description>
@@ -78,7 +87,7 @@
     <item>
       <title>Web-scraping Analysis</title>
       <link>/tags/web-scraping-analysis/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/web-scraping-analysis/</guid>
       <description></description>

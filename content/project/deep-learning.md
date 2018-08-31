@@ -36,9 +36,10 @@ identifying potential fraudulent records from the data set using unsupervised ma
 The programming tools used for Data Cleaning were performed on Microsoft Excel and R. The original
 dataset contains unique records of more than 1 million properties across the state of New York with 30
 different fields, both numerical and categorical. Necessary feature analysis include:
-● Data Understanding and Data Cleaning (estimating missing values of each fields)
-● Data Modeling (creating expert variables) and Data Evaluation
-● Fraud Score Calculation (Heuristic Algorithm and Autoencoder)
+
+- Data Understanding and Data Cleaning (estimating missing values of each fields)
+- Data Modeling (creating expert variables) and Data Evaluation
+- Fraud Score Calculation (Heuristic Algorithm and Autoencoder)
 
 ##### Project Goal
 Our objective for this project is to use machine learning algorithms such as Autoencoder and Heuristic
@@ -50,10 +51,11 @@ complete detail.
 ##### Key Findings
 The two fraud detection algorithms we used, Heuristic and Autoencoder-Based Anomaly Detection, had
 a considerably high overlap matching percentage among the top 1% of all records:
-● Missing values were properly filled using reasonable data cleaning methodology.
-● The 51 expert variables were carefully crafted to perform PCA analysis.
-● After normalizing the fraud scores and visualizing the scores, we found both score distributions
+
+- Missing values were properly filled using reasonable data cleaning methodology.
+- The 51 expert variables were carefully crafted to perform PCA analysis.
+- After normalizing the fraud scores and visualizing the scores, we found both score distributions
 to be right skewed.
-● Among the top 10 highest fraud score records, anomalies were found in several fields.
+- Among the top 10 highest fraud score records, anomalies were found in several fields.
 
 <a href="https://drive.google.com/open?id=1-UvdR-EvZEsEr-Fjv4qaMBiuqFKvYwbq" download>Click to Download the full report</a>

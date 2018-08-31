@@ -18,7 +18,8 @@
       <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
       
       <guid>/project/supervised-learning/</guid>
-      <description>Description This report provides a detailed analysis of the ‘applications’ dataset using supervised fraud algorithms and machine learning statistical techniques. The programming tools used for Data Cleaning, Modeling, and Evaluation were Microsoft Excel, Tableau, R, along with mySQL through R. The original dataset contains unique records of more 90,000 product applications over the year 2016. Necessary feature analysis include: ● Data Understanding and Data Cleaning (dealing with frivolous values) ● Feature Engineering (creating expert Variables, performing feature selection) ● Data Modeling (running fraud detection models) ● Data Evaluation (comparing model results)</description>
+      <description>Description This report provides a detailed analysis of the ‘applications’ dataset using supervised fraud algorithms and machine learning statistical techniques. The programming tools used for Data Cleaning, Modeling, and Evaluation were Microsoft Excel, Tableau, R, along with mySQL through R. The original dataset contains unique records of more 90,000 product applications over the year 2016. Necessary feature analysis include:
+ Data Understanding and Data Cleaning (dealing with frivolous values) Feature Engineering (creating expert Variables, performing feature selection) Data Modeling (running fraud detection models) Data Evaluation (comparing model results)  Project Goal Our objective for this project is to use a supervised fraud algorithm to build a fraud detection model that predicts product application fraud with high predictive accuracy.</description>
     </item>
     
     <item>
@@ -28,6 +29,16 @@
       
       <guid>/project/deep-learning/</guid>
       <description>Description This report provides a detailed analysis of ‘New York City Property Tax Valuation Data’ and also aims at identifying potential fraudulent records from the data set using unsupervised machine learning methods. The programming tools used for Data Cleaning were performed on Microsoft Excel and R. The original dataset contains unique records of more than 1 million properties across the state of New York with 30 different fields, both numerical and categorical.</description>
+    </item>
+    
+    <item>
+      <title>Homeless Geospatial Visualization Dashboard with Shiny</title>
+      <link>/project/homeless_project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      
+      <guid>/project/homeless_project/</guid>
+      <description>Introduction Homelessness is soaring in Los Angeles and is a severe issue that is a part of everyday life. Our objective for this project:
+ Determining the need, demand and potential effects of different strategies for homeless intervention. Identifying the areas with high-concentrations of unsheltered homelessness, crime incidents and high danger areas for the homeless community in order to help address the homelessness in full scope, while prioritizing service delivery needs  In order to gain insight on homelessness:</description>
     </item>
     
     <item>

@@ -36,10 +36,11 @@ learning statistical techniques.
 The programming tools used for Data Cleaning, Modeling, and Evaluation were Microsoft Excel, Tableau, R, along with
 mySQL through R. The original dataset contains unique records of more 90,000 product applications over the year 2016.
 Necessary feature analysis include:
-● Data Understanding and Data Cleaning (dealing with frivolous values)
-● Feature Engineering (creating expert Variables, performing feature selection)
-● Data Modeling (running fraud detection models)
-● Data Evaluation (comparing model results)
+
+- Data Understanding and Data Cleaning (dealing with frivolous values)
+- Feature Engineering (creating expert Variables, performing feature selection)
+- Data Modeling (running fraud detection models)
+- Data Evaluation (comparing model results)
 
 ##### Project Goal
 Our objective for this project is to use a supervised fraud algorithm to build a fraud detection model that predicts product
@@ -51,12 +52,19 @@ Boosting Trees.
 
 ##### Key Findings
 Here are the main key findings from building a Fraud Detection Model on the Applications dataset:
-● The Gradient Boosting Trees method yielded the best Fraud Detection model at 10% penetration on the OOT (Out
+
+- The Gradient Boosting Trees method yielded the best Fraud Detection model at 10% penetration on the OOT (Out
 of Time) dataset with a FDR (Fraud Detection Rate) of 13.02% including a FDR of 12.50% on the testing dataset
-● The Support Vector Machine Method yielded the lowest Fraud Detection Rate (FDR) at 10% penetration on the
+- The Support Vector Machine Method yielded the lowest Fraud Detection Rate (FDR) at 10% penetration on the
 OOT (Out of Time) dataset with a FDR (Fraud Detection Rate) of 11.81% including a FDR of 11.01% on the testing
 dataset
-● Overall, Gradient Boosting Trees and Random Forest Models both demonstrated relatively high predictive
+- Overall, Gradient Boosting Trees and Random Forest Models both demonstrated relatively high predictive
 performance, with the highest predictive power in their respective segments
+
+<img src="/project/fraud_detection_models.png" width="672" />
+
+
+<img src="/project/fraud_detection_table.png" width="672" />
+
 
 <a href="https://drive.google.com/open?id=1GA_gXqiBCMlOUP8eLz_TatD9mEqLREGM" download>Click to Download the full report</a>

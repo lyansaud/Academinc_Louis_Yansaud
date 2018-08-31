@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Geospatial Visualization on Louis Yansaud</title>
+    <link>/tags/geospatial-visualization/</link>
+    <description>Recent content in Geospatial Visualization on Louis Yansaud</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/geospatial-visualization/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Homeless Geospatial Visualization Dashboard with Shiny</title>
+      <link>/project/homeless_project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      
+      <guid>/project/homeless_project/</guid>
+      <description>Introduction Homelessness is soaring in Los Angeles and is a severe issue that is a part of everyday life. Our objective for this project:
+ Determining the need, demand and potential effects of different strategies for homeless intervention. Identifying the areas with high-concentrations of unsheltered homelessness, crime incidents and high danger areas for the homeless community in order to help address the homelessness in full scope, while prioritizing service delivery needs  In order to gain insight on homelessness:</description>
+    </item>
+    
+  </channel>
+</rss>
