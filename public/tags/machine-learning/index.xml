@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Machine Learning on Louis Yansaud Website</title>
+    <link>/tags/machine-learning/</link>
+    <description>Recent content in Machine Learning on Louis Yansaud Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Fraud Analytics: Fraud Score Calculation</title>
+      <link>/project/deep-learning/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      
+      <guid>/project/deep-learning/</guid>
+      <description>Description This report provides a detailed analysis of ‘New York City Property Tax Valuation Data’ and also aims at identifying potential fraudulent records from the data set using unsupervised machine learning methods. The programming tools used for Data Cleaning were performed on Microsoft Excel and R. The original dataset contains unique records of more than 1 million properties across the state of New York with 30 different fields, both numerical and categorical.</description>
+    </item>
+    
+  </channel>
+</rss>

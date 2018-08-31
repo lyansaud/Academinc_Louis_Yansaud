@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Supervised Machine Learning on Louis Yansaud</title>
+    <link>/tags/supervised-machine-learning/</link>
+    <description>Recent content in Supervised Machine Learning on Louis Yansaud</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/supervised-machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Fraud Analytics: Fraud Detection Model</title>
+      <link>/project/supervised-learning/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 -0700</pubDate>
+      
+      <guid>/project/supervised-learning/</guid>
+      <description>Description This report provides a detailed analysis of the ‘applications’ dataset using supervised fraud algorithms and machine learning statistical techniques. The programming tools used for Data Cleaning, Modeling, and Evaluation were Microsoft Excel, Tableau, R, along with mySQL through R. The original dataset contains unique records of more 90,000 product applications over the year 2016. Necessary feature analysis include: ● Data Understanding and Data Cleaning (dealing with frivolous values) ● Feature Engineering (creating expert Variables, performing feature selection) ● Data Modeling (running fraud detection models) ● Data Evaluation (comparing model results)</description>
+    </item>
+    
+    <item>
+      <title>Titanic Survival</title>
+      <link>/post/titanic_survival/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/titanic_survival/</guid>
+      <description>Loading Data set and libraries library(dplyr) library(ggplot2) library(stringr) library(caret) library(Hmisc) library(randomForest) train &amp;lt;- read.csv(&amp;quot;train.csv&amp;quot;) test &amp;lt;- read.csv(&amp;quot;test.csv&amp;quot;)  Data exploration summary(test) ## PassengerId Pclass ## Min. : 892.0 Min. :1.000 ## 1st Qu.: 996.2 1st Qu.:1.000 ## Median :1100.5 Median :3.000 ## Mean :1100.5 Mean :2.266 ## 3rd Qu.:1204.8 3rd Qu.:3.000 ## Max. :1309.0 Max. :3.000 ## ## Name Sex ## Abbott, Master. Eugene Joseph : 1 female:152 ## Abelseth, Miss.</description>
+    </item>
+    
+  </channel>
+</rss>

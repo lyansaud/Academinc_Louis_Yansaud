@@ -1,0 +1,386 @@
+---
+title: "Titanic_Survival"
+author: "Louis_Yansaud"
+date: "January 29, 2018"
+categories: ["R"]
+tags: ["R Markdown", "Supervised Machine Learning", "Data Analysis"]
+---
+
+
+##### Loading Data set and libraries
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(caret)
+library(Hmisc)
+library(randomForest)
+
+train <- read.csv("train.csv")
+test <- read.csv("test.csv")
+```
+
+
+##### Data exploration
+```{r, message=FALSE, warning=FALSE}
+summary(test)
+summary(train)
+#We can see that survived is missing on the test data, let's input it as a NA value for now
+
+test <- test %>%
+  mutate(Survived = NA)
+
+#Lets merge the two dataset together for data wrangling/cleaning
+merge_data <- rbind(train, test)
+
+#Checking if there are no duplicates
+length(unique(merge_data$PassengerId)) == 891 + 418
+#TRUE
+
+
+```
+
+Looking at the Survived by Sex
+```{r, message=FALSE, warning=FALSE}
+train %>%
+  ggplot(aes(x = Sex, fill = as.factor(Survived)))+
+  geom_bar()+
+  geom_text(stat = 'count', aes(label = ..count..))+
+  scale_fill_discrete(name = 'Survived')
+```
+Looking at the Survived by Pclass
+```{r, message=FALSE, warning=FALSE}
+train %>%
+  ggplot(aes(x = as.factor(Pclass), fill = as.factor(Survived)))+
+  geom_bar()+
+  scale_fill_discrete(name = 'Survived')+
+  xlab("Pclass")
+```
+
+LOoking at the Survived by Sibsp
+```{r, message=FALSE, warning=FALSE}
+train %>%
+  ggplot(aes(x = as.factor(SibSp), fill = as.factor(Survived)))+
+  geom_bar()+
+  scale_fill_discrete(name = 'Survived')+
+  xlab("SibSp")
+```
+
+Looking at the Survived by Sibsp and Sex
+```{r, message=FALSE, warning=FALSE}
+train %>%
+  ggplot(aes(x = as.factor(SibSp), fill = as.factor(Survived)))+
+  geom_bar()+
+  facet_wrap(~Sex)+
+  scale_fill_discrete(name = 'Survived')+
+  xlab("SibSp")
+```
+
+
+Looking at the Survived by Pclass and Sex
+```{r, message=FALSE, warning=FALSE}
+train %>%
+  ggplot(aes(x = as.factor(Pclass), fill = as.factor(Survived)))+
+  geom_bar()+
+  facet_wrap(~Sex)+
+  scale_fill_discrete(name = 'Survived')+
+  xlab("Pclass")
+```
+
+Looking at the age distribution
+```{r, message=FALSE, warning=FALSE}
+merge_data %>%
+  ggplot(aes(x = Age))+
+  geom_histogram(fill = "#000099", color = "black")
+```
+
+###### Data understanding and Data cleaning
+Lets group the age into bucket
+```{r, message=FALSE, warning=FALSE}
+
+
+#Lets convert some of the columns name into factors
+
+merge_data$Sex <- as.factor(merge_data$Sex)
+merge_data$Pclass <- as.factor(merge_data$Pclass)
+
+#First lets replace the missing values of age by the mean of the subgroup by pclass since it has no missing values 
+
+merge_data %>%
+  filter(!is.na(Age)) %>%
+  group_by(Pclass) %>%
+  summarise(Age_Pclass_mean = round(mean(Age)))
+
+# 1                 39
+# 2                 30
+# 3                 25
+
+#now lets replace the missing age values
+
+merge_data_missing_age <- merge_data %>%
+                            filter(is.na(Age)) %>%
+                            mutate(Age = ifelse(Pclass == "1",  39 ,
+                                                ifelse(Pclass == "2", 30, 25))) %>% 
+                            select(PassengerId, Age)
+
+merge_data <- merge_data %>%
+  left_join(merge_data_missing_age, by = 'PassengerId') %>%
+  mutate(Age = ifelse(is.na(Age.x), Age.y, Age.x)) %>%
+  select(-Age.x, -Age.y)
+
+merge_data$Age_bucket = ifelse(merge_data$Age < 12 , "<12",
+                               ifelse(merge_data$Age >= 12 & merge_data$Age < 21, "16-21",
+                                ifelse(merge_data$Age >= 21 & merge_data$Age < 30, "21-30",
+                                       ifelse(merge_data$Age >= 30 & merge_data$Age < 40, "30-40",
+                                              ifelse(merge_data$Age >= 40 & merge_data$Age < 50, "40-50","50+")))))
+
+merge_data %>%
+  group_by(Age_bucket) %>%
+  tally()
+
+merge_data$Age_bucket <- as.factor(merge_data$Age_bucket)
+```
+
+```{r, message=FALSE, warning=FALSE}
+merge_data[1:891,] %>%
+  ggplot(aes(x = as.factor(Age_bucket), fill = as.factor(Survived)))+
+  geom_bar()+
+  facet_wrap(~Sex)+
+  scale_fill_discrete(name = 'Survived')+
+  xlab("Age Bucket")
+```
+
+
+
+Lets extract the first letter from the Cabin
+```{r, message=FALSE, warning=FALSE}
+
+length(unique(merge_data$Cabin))
+merge_data$Cabin_Letter <- str_sub(merge_data$Cabin,1,1)
+
+#creating a boolean variable
+
+merge_data$Cabin_Available <- as.factor(!(merge_data$Cabin==""))
+
+```
+
+
+Fare
+```{r, message=FALSE, warning=FALSE}
+merge_data %>%
+  ggplot(aes(x = Fare))+
+  geom_histogram(fill = "#000099", color = "black")
+
+sum(is.na(merge_data$Fare))
+
+merge_data[which(is.na(merge_data$Fare)),]
+
+#lets replace the fare by mean of Pclass = 3
+
+merge_data[1044,]$Fare <- mean(subset(merge_data,Pclass==3)$Fare,na.rm=TRUE)
+
+merge_data$Fare_bucket <- cut2(merge_data$Fare,g=5)
+merge_data$Fare_bucket <- as.factor(merge_data$Fare_bucket)
+
+
+merge_data[1:891,] %>%
+  ggplot(aes(x = as.factor(Fare_bucket), fill = as.factor(Survived)))+
+  geom_bar()+
+  facet_wrap(~Sex)+
+  scale_fill_discrete(name = 'Survived')+
+  xlab("Fare Bucket")
+```
+
+
+Title
+```{r, message=FALSE, warning=FALSE}
+
+merge_data$Title <- merge_data$Title <- gsub('(.*, )|(\\..*)', '', merge_data$Name)
+unique(merge_data$Title)
+
+#We can see that there some titles that seem to have some luxurious power such as Sir, Major etc...
+
+
+Power_Title <- c("Capt","Col","Don","Dona","Dr","Jonkheer","Lady","Major",
+         "Mlle", "Mme","Rev","Sir","the Countess")
+
+merge_data$Title[merge_data$Title %in% Power_Title] <- "Luxurious Title"
+merge_data$Title <- as.factor(merge_data$Title)
+
+```
+
+Embarked
+```{r, message=FALSE, warning=FALSE}
+
+merge_data$Embarked %>% head()
+merge_data$Embarked <- as.factor(merge_data$Embarked)
+str(merge_data)
+summary(merge_data$Embarked)
+```
+
+
+SibSp
+```{r, message=FALSE, warning=FALSE}
+merge_data$SibSp <- as.factor(merge_data$SibSp)
+```
+
+Ticket
+```{r, message=FALSE, warning=FALSE}
+library(plyr)
+merge_data <- ddply(merge_data,.(Ticket),transform,Ticketsize=length(Ticket))
+merge_data$Ticketsize <- as.factor(merge_data$Ticketsize)
+merge_data <- merge_data  %>%
+              arrange(PassengerId)
+
+```
+
+
+
+##### Data Modeling
+```{r, message=FALSE, warning=FALSE}
+
+#resplitting the merge data
+train_merge <- merge_data[1:891,]
+test_merge <- merge_data[892:1309,]
+
+train_merge$Survived <- as.factor(train_merge$Survived)
+
+#splitting the train merge dataset into a build and validate set
+set.seed(123)
+smp_size <- floor(0.75* nrow(train_merge))
+train_ind <- sample(seq_len(nrow(train_merge)), size = smp_size)
+
+train <- train_merge[train_ind, ]
+test <- train_merge[-train_ind, ]
+
+
+```
+
+
+Logistic Regression
+```{r, message=FALSE, warning=FALSE}
+
+log.fit <- glm(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +Cabin_Available + Title + Embarked + Ticketsize, family = binomial(link = logit), data = train)
+
+summary(log.fit)
+
+
+```
+
+```{r, message=FALSE, warning=FALSE}
+log_prediction <- predict(log.fit, newdata = test, type = "response")
+log_prediction <- ifelse(log_prediction > 0.5 , 1 , 0)
+logistic_classification_error <- mean(log_prediction != test$Survived)
+logistic_accuracy <- 1 - logistic_classification_error
+
+library(formattable)
+print(paste0("The Accuracy for the Logistic Regression is: ", percent(logistic_accuracy)))
+
+```
+
+##### Let's use the Caret package to improvde our predictive abilities by using 10-fold cross validation
+
+```{r, message=FALSE, warning=FALSE}
+trainControl <- trainControl(method = "repeatedcv", number = 10, repeats = 3)
+metric <- "Accuracy"
+```
+
+
+Logistic Regression
+```{r, message=FALSE, warning=FALSE}
+set.seed(123)
+logistic.fit_2 <- train(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +Cabin_Available + Title + Embarked + SibSp, data = train, method = "glm", metric = metric , trControl = trainControl)
+```
+
+KNN
+```{r, message=FALSE, warning=FALSE}
+library(caret)
+set.seed(123)
+knn.fit <- train(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +Cabin_Available + Title + Embarked + SibSp, data = train, method = "knn", metric = metric , trControl = trainControl)
+
+```
+
+SVM
+```{r}
+set.seed(123)
+svm.fit <- train(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +Cabin_Available + Title + Embarked + SibSp, data = train, method = "svmRadial", metric = metric , trControl = trainControl)
+```
+
+
+Naives Bayes
+```{r, message=FALSE, warning=FALSE}
+set.seed(123)
+naives.fit <- train(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +Cabin_Available + Title + Embarked + SibSp, data = train, method = "nb", metric = metric , trControl = trainControl)
+
+```
+
+```{r, message=FALSE, warning=FALSE}
+results <- resamples(list(Logistic_Regression =logistic.fit_2, KNN=knn.fit,
+   NB=naives.fit, SVM=svm.fit))
+
+summary(results)
+```
+
+```{r, message=FALSE, warning=FALSE}
+dotplot(results)
+```
+From the plot above, we can see that SVm has a the highest accuracy
+
+##### SVM Algorithm tuning
+
+```{r, message=FALSE, warning=FALSE}
+grid <- expand.grid(.sigma=c(0.005, 0.01, 0.015, 0.02), .C=seq(1, 10, by=1))
+
+set.seed(1234)
+svm.fit_2 <- train(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket + Cabin_Available + Title + Embarked + SibSp, data = train, method = "svmRadial", metric = metric , trControl = trainControl, tuneGrid = grid)
+
+print(svm.fit_2)
+```
+
+```{r, message=FALSE, warning=FALSE}
+plot(svm.fit_2)
+```
+
+##### Random Forest
+```{r, message=FALSE, warning=FALSE}
+rf.fit <- randomForest(factor(Survived) ~Pclass + Sex + Age_bucket + Fare_bucket +Cabin_Available + Title + Embarked + Ticketsize,
+                              data = train ,nodesize=20)
+print(rf.fit)
+```
+Based on the summary, the random forest model gives us an accuracy of 80.1%
+```{r}
+plot(rf.fit)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+importance(rf.fit)
+```
+
+```{r}
+rf.fit$confusion
+```
+
+Based on the random forest variable importance, lets only keep the following: Pclass + Sex + Age_bucket+ Fare_bucket Title + Ticketsize
+```{r}
+rf.fit2 <- randomForest(factor(Survived) ~Pclass + Sex + Fare_bucket + Cabin_Available + Ticketsize + Embarked + Title ,
+                              data = train, nodesize=20)
+
+rf.fit2$confusion
+```
+
+
+##### Conclusion: Logistic Regression is the winner 
+```{r}
+best_model <- rf.fit
+prediction <- predict(best_model, test_merge)
+
+submission <- data.frame(PassengerId=names(prediction),Survived=prediction)
+submission %>% head()
+
+write.csv(submission, file = "fourth_submission.csv", row.names = FALSE)
+
+```
+
+
+

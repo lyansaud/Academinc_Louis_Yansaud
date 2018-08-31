@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R Markdown on Louis Yansaud</title>
+    <link>/tags/r-markdown/</link>
+    <description>Recent content in R Markdown on Louis Yansaud</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    
+	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Titanic Survival</title>
+      <link>/post/titanic_survival/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/titanic_survival/</guid>
+      <description>Loading Data set and libraries library(dplyr) library(ggplot2) library(stringr) library(caret) library(Hmisc) library(randomForest) train &amp;lt;- read.csv(&amp;quot;train.csv&amp;quot;) test &amp;lt;- read.csv(&amp;quot;test.csv&amp;quot;)  Data exploration summary(test) ## PassengerId Pclass ## Min. : 892.0 Min. :1.000 ## 1st Qu.: 996.2 1st Qu.:1.000 ## Median :1100.5 Median :3.000 ## Mean :1100.5 Mean :2.266 ## 3rd Qu.:1204.8 3rd Qu.:3.000 ## Max. :1309.0 Max. :3.000 ## ## Name Sex ## Abbott, Master. Eugene Joseph : 1 female:152 ## Abelseth, Miss.</description>
+    </item>
+    
+    <item>
+      <title>Twitter Sentiment Analysis</title>
+      <link>/post/twitter_sentiment_analysis/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/twitter_sentiment_analysis/</guid>
+      <description>From my previous post, I first performed extensive data cleaning in order to analyze the sentiment of each individual cryptocurrency. Here is the result of my analysis.
+library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra) knitr::opts_chunk$set(warning = FALSE, message = FALSE) WordClouds and D3WordClouds Bitcoin
+library(d3wordcloud) big_data_clean_2 &amp;lt;- read.csv(&amp;quot;big_data_clean_2.csv&amp;quot;) bitcoin_words &amp;lt;- big_data_clean_2 %&amp;gt;% filter(coin == &amp;quot;bitcoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count)) set.</description>
+    </item>
+    
+  </channel>
+</rss>

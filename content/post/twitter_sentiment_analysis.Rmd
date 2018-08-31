@@ -1,0 +1,120 @@
+---
+title: "Twitter Sentiment Analysis"
+author: "Louis_Yansaud"
+date: "August 29, 2018"
+categories: ["R"]
+tags: ["R Markdown", "Web-scraping Analysis", "Sentiment Analysis"]
+
+---
+
+From my previous post, I first performed extensive data cleaning in order to analyze the sentiment of each individual cryptocurrency. Here is the result of my analysis.
+
+
+```{r, warning=FALSE, message= FALSE}
+library(twitteR)
+library(dplyr)
+library(tm)
+library(wordcloud)
+library(tidytext)
+library(tidyverse)
+library(sqldf)
+library(ggplot2)
+library(ggthemes)
+library(data.table)
+library(gridExtra)
+
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+##### WordClouds and D3WordClouds
+
+Bitcoin
+```{r, warning=FALSE, message= FALSE}
+library(d3wordcloud)
+big_data_clean_2 <- read.csv("big_data_clean_2.csv")
+
+bitcoin_words <-  big_data_clean_2 %>%
+            filter(coin == "bitcoin") %>% select(words,words_count) %>% arrange(desc(words_count))
+
+set.seed(123)
+wordcloud(words = bitcoin_words$words, freq = bitcoin_words$words_count, min.freq = 10,
+          max.words=100, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(10, "Dark2"))
+
+
+
+d3wordcloud(bitcoin_words$words, bitcoin_words$words_count,  padding = 5,  width = "100%", height = "500px")
+```
+
+Ethereum 
+```{r}
+ethereum_words <-  big_data_clean_2 %>%
+            filter(coin == "ethereum") %>% select(words,words_count) %>% arrange(desc(words_count))
+
+set.seed(123)
+wordcloud(words = ethereum_words$words, freq = ethereum_words$words_count, min.freq = 10,
+          max.words=100, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(10, "Dark2"))
+
+```
+
+
+Litecoin
+```{r, warning=FALSE, message= FALSE}
+litecoin_words <-  big_data_clean_2 %>%
+            filter(coin == "litecoin") %>% select(words,words_count) %>% arrange(desc(words_count))
+
+set.seed(123)
+wordcloud(words = litecoin_words$words, freq = litecoin_words$words_count, min.freq = 10,
+          max.words=100, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(10, "Dark2"))
+
+```
+
+
+##### Sentiment Analysis
+
+Bitcoin
+```{r, warning=FALSE, message= FALSE}
+data_crypto_sentiment <- read.csv("data_crypto_sentiment.csv")
+
+plotly::ggplotly(data_crypto_sentiment %>%
+  filter(coin == "bitcoin" & !is.na(sentiment)) %>%
+  group_by(sentiment) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  ggplot(aes( x = reorder(as.character(sentiment), count), y = count))+
+  geom_bar(stat = 'identity', fill = "#4271AE")+
+  coord_flip()+
+  labs(title='Bitcoin Sentiments', x='Sentiments',y='Sentiment Count')+
+  theme_economist())
+```
+
+Ethereum
+```{r, warning=FALSE, message= FALSE}
+plotly::ggplotly(data_crypto_sentiment %>%
+  filter(coin == "ethereum" & !is.na(sentiment)) %>%
+  group_by(sentiment) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  ggplot(aes( x = reorder(as.character(sentiment), count), y = count))+
+  geom_bar(stat = 'identity', fill = "#4271AE")+
+  coord_flip()+
+  labs(title='Ethereum Sentiments', x='Sentiments',y='Sentiment Count')+
+  theme_economist())
+```
+
+
+Litecoin
+```{r, warning=FALSE, message= FALSE}
+plotly::ggplotly(data_crypto_sentiment %>%
+  filter(coin == "litecoin" & !is.na(sentiment)) %>%
+  group_by(sentiment) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count)) %>%
+  ggplot(aes( x = reorder(as.character(sentiment), count), y = count))+
+  geom_bar(stat = 'identity', fill = "#4271AE")+
+  coord_flip()+
+  labs(title='Litecoin Sentiments', x='Sentiments',y='Sentiment Count')+
+  theme_economist())
+```

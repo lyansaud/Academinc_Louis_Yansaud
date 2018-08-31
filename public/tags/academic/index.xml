@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Academic on Louis Yansaud</title>
+    <link>/tags/academic/</link>
+    <description>Recent content in Academic on Louis Yansaud</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Fri, 20 Jul 2018 00:00:00 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/academic/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Web Scraping Analysis Function</title>
+      <link>/post/web-scraping-twitter/</link>
+      <pubDate>Fri, 20 Jul 2018 00:00:00 -0700</pubDate>
+      
+      <guid>/post/web-scraping-twitter/</guid>
+      <description>I performed a sentiment analysis on each individual cryptocurrency using Twitter API to have a better understanding about the influence of social media on cryptocurrencies.
+library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra)  Built-funcrion for Web Scraping Analysis I built a function to do some web-scraping analysis in order to facilitate the extraction of Twitter data.
+setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_token_secret) twitter_scraping_data &amp;lt;- function(coin_name){ coin_data = twitteR::searchTwitter(paste0(&amp;quot;#&amp;quot;,coin_name,&amp;quot; -filter:retweets&amp;quot;), lang = &amp;quot;en&amp;quot;, n = 100, since = &#39;2017-08-01&#39;, until = as.</description>
+    </item>
+    
+  </channel>
+</rss>
