@@ -15,6 +15,7 @@ library(stringr)
 library(caret)
 library(Hmisc)
 library(randomForest)
+setwd("~/Louis-Academic/data")
 
 train <- read.csv("train.csv")
 test <- read.csv("test.csv")
