@@ -18,8 +18,8 @@ library(randomForest)
 library(readr)
 
 
-train <- read_csv("../../data/train.csv")
-test <- read_csv("../../data/test.csv")
+train <- read_csv("../../static/data/train.csv")
+test <- read_csv("../../static/data/test.csv")
 ```
 
 
