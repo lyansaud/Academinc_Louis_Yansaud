@@ -20,7 +20,7 @@ weight = 3
 #   Activate the button by specifying a URL and button label below.
 #   Deactivate by commenting out parameters, prefixing lines with `#`.
 [cta]
-  url = "https://drive.google.com/open?id=1elzuswEmnR90O2PtxWdz5sA6r9LwuAKa"
+  url = "files/louis_yansaud_cv.pdf"
   label = '<i class="fa fa-download"></i> Download my Resume'
 +++
 
