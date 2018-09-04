@@ -18,8 +18,8 @@
       
       <guid>/post/twitter_sentiment_analysis/</guid>
       <description>From my previous post, I first performed extensive data cleaning in order to analyze the sentiment of each individual cryptocurrency. Here is the result of my analysis.
-library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra) library(data.table) knitr::opts_chunk$set(warning = FALSE, message = FALSE) setwd(&amp;quot;~/Louis-Academic/data&amp;quot;) WordClouds and D3WordClouds Bitcoin
-library(d3wordcloud) big_data_clean_2 &amp;lt;- read.csv(&amp;quot;big_data_clean_2.csv&amp;quot;) bitcoin_words &amp;lt;- big_data_clean_2 %&amp;gt;% filter(coin == &amp;quot;bitcoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count)) set.</description>
+library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra) library(data.table) library(readr) knitr::opts_chunk$set(warning = FALSE, message = FALSE) WordClouds and D3WordClouds Bitcoin
+library(d3wordcloud) big_data_clean_2 &amp;lt;- read_csv(&amp;quot;../../data/big_data_clean_2.csv&amp;quot;) bitcoin_words &amp;lt;- big_data_clean_2 %&amp;gt;% filter(coin == &amp;quot;bitcoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count)) set.</description>
     </item>
     
   </channel>

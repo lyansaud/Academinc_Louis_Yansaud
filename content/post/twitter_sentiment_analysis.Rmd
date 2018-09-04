@@ -23,10 +23,10 @@ library(ggthemes)
 library(data.table)
 library(gridExtra)
 library(data.table)
+library(readr)
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
-setwd("~/Louis-Academic/data")
 ```
 
 ##### WordClouds and D3WordClouds
@@ -34,7 +34,7 @@ setwd("~/Louis-Academic/data")
 Bitcoin
 ```{r, warning=FALSE, message= FALSE}
 library(d3wordcloud)
-big_data_clean_2 <- read.csv("big_data_clean_2.csv")
+big_data_clean_2 <- read_csv("../../data/big_data_clean_2.csv")
 
 bitcoin_words <-  big_data_clean_2 %>%
             filter(coin == "bitcoin") %>% select(words,words_count) %>% arrange(desc(words_count))
@@ -79,7 +79,7 @@ wordcloud(words = litecoin_words$words, freq = litecoin_words$words_count, min.f
 
 Bitcoin
 ```{r, warning=FALSE, message= FALSE}
-data_crypto_sentiment <- read.csv("data_crypto_sentiment.csv")
+data_crypto_sentiment <- read_csv("../../data/data_crypto_sentiment.csv")
 
 plotly::ggplotly(data_crypto_sentiment %>%
   filter(coin == "bitcoin" & !is.na(sentiment)) %>%

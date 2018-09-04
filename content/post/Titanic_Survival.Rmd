@@ -15,10 +15,11 @@ library(stringr)
 library(caret)
 library(Hmisc)
 library(randomForest)
-setwd("~/Louis-Academic/data")
+library(readr)
 
-train <- read.csv("train.csv")
-test <- read.csv("test.csv")
+
+train <- read_csv("../../data/train.csv")
+test <- read_csv("../../data/test.csv")
 ```
 
 
@@ -161,7 +162,8 @@ merge_data$Cabin_Letter <- str_sub(merge_data$Cabin,1,1)
 
 #creating a boolean variable
 
-merge_data$Cabin_Available <- as.factor(!(merge_data$Cabin==""))
+merge_data$Cabin_Available <- as.factor(ifelse(is.na(merge_data$Cabin),FALSE,TRUE))
+
 
 ```
 
@@ -217,6 +219,11 @@ merge_data$Embarked %>% head()
 merge_data$Embarked <- as.factor(merge_data$Embarked)
 str(merge_data)
 summary(merge_data$Embarked)
+
+merge_data[which(is.na(merge_data$Embarked)),]
+
+merge_data[c(62,830),"Embarked"] <- "S"
+
 ```
 
 
@@ -240,6 +247,9 @@ merge_data <- merge_data  %>%
 ##### Data Modeling
 ```{r, message=FALSE, warning=FALSE}
 
+merge_data <- merge_data %>% select(Survived,Pclass,Sex,Age_bucket,Fare_bucket, 
+    Cabin_Available,Title,Embarked,Ticketsize,SibSp)
+
 #resplitting the merge data
 train_merge <- merge_data[1:891,]
 test_merge <- merge_data[892:1309,]
@@ -254,7 +264,7 @@ train_ind <- sample(seq_len(nrow(train_merge)), size = smp_size)
 train <- train_merge[train_ind, ]
 test <- train_merge[-train_ind, ]
 
-
+train$Survived <- as.factor(train$Survived)
 ```
 
 
@@ -264,6 +274,7 @@ Logistic Regression
 log.fit <- glm(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +Cabin_Available + Title + Embarked + Ticketsize, family = binomial(link = logit), data = train)
 
 summary(log.fit)
+
 
 
 ```
@@ -290,7 +301,7 @@ metric <- "Accuracy"
 Logistic Regression
 ```{r, message=FALSE, warning=FALSE}
 set.seed(123)
-logistic.fit_2 <- train(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +Cabin_Available + Title + Embarked + SibSp, data = train, method = "glm", metric = metric , trControl = trainControl)
+logistic.fit_2 <- train(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +  Title + Embarked + SibSp, data = train, method = "glm", metric = metric , trControl = trainControl)
 ```
 
 KNN
@@ -379,7 +390,7 @@ prediction <- predict(best_model, test_merge)
 submission <- data.frame(PassengerId=names(prediction),Survived=prediction)
 submission %>% head()
 
-write.csv(submission, file = "fourth_submission.csv", row.names = FALSE)
+#write.csv(submission, file = "fourth_submission.csv", row.names = FALSE)
 
 ```
 

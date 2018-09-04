@@ -20,79 +20,64 @@ library(stringr)
 library(caret)
 library(Hmisc)
 library(randomForest)
-setwd(&quot;~/Louis-Academic/data&quot;)
+library(readr)
 
-train &lt;- read.csv(&quot;train.csv&quot;)
-test &lt;- read.csv(&quot;test.csv&quot;)</code></pre>
+
+train &lt;- read_csv(&quot;../../data/train.csv&quot;)
+test &lt;- read_csv(&quot;../../data/test.csv&quot;)</code></pre>
 </div>
 <div id="data-exploration" class="section level5">
 <h5>Data exploration</h5>
 <pre class="r"><code>summary(test)</code></pre>
-<pre><code>##   PassengerId         Pclass     
-##  Min.   : 892.0   Min.   :1.000  
-##  1st Qu.: 996.2   1st Qu.:1.000  
-##  Median :1100.5   Median :3.000  
-##  Mean   :1100.5   Mean   :2.266  
-##  3rd Qu.:1204.8   3rd Qu.:3.000  
-##  Max.   :1309.0   Max.   :3.000  
-##                                  
-##                                         Name         Sex     
-##  Abbott, Master. Eugene Joseph            :  1   female:152  
-##  Abelseth, Miss. Karen Marie              :  1   male  :266  
-##  Abelseth, Mr. Olaus Jorgensen            :  1               
-##  Abrahamsson, Mr. Abraham August Johannes :  1               
-##  Abrahim, Mrs. Joseph (Sophie Halaut Easu):  1               
-##  Aks, Master. Philip Frank                :  1               
-##  (Other)                                  :412               
-##       Age            SibSp            Parch             Ticket   
-##  Min.   : 0.17   Min.   :0.0000   Min.   :0.0000   PC 17608:  5  
-##  1st Qu.:21.00   1st Qu.:0.0000   1st Qu.:0.0000   113503  :  4  
-##  Median :27.00   Median :0.0000   Median :0.0000   CA. 2343:  4  
-##  Mean   :30.27   Mean   :0.4474   Mean   :0.3923   16966   :  3  
-##  3rd Qu.:39.00   3rd Qu.:1.0000   3rd Qu.:0.0000   220845  :  3  
-##  Max.   :76.00   Max.   :8.0000   Max.   :9.0000   347077  :  3  
-##  NA&#39;s   :86                                        (Other) :396  
-##       Fare                     Cabin     Embarked
-##  Min.   :  0.000                  :327   C:102   
-##  1st Qu.:  7.896   B57 B59 B63 B66:  3   Q: 46   
-##  Median : 14.454   A34            :  2   S:270   
-##  Mean   : 35.627   B45            :  2           
-##  3rd Qu.: 31.500   C101           :  2           
-##  Max.   :512.329   C116           :  2           
-##  NA&#39;s   :1         (Other)        : 80</code></pre>
+<pre><code>##   PassengerId         Pclass          Name               Sex           
+##  Min.   : 892.0   Min.   :1.000   Length:418         Length:418        
+##  1st Qu.: 996.2   1st Qu.:1.000   Class :character   Class :character  
+##  Median :1100.5   Median :3.000   Mode  :character   Mode  :character  
+##  Mean   :1100.5   Mean   :2.266                                        
+##  3rd Qu.:1204.8   3rd Qu.:3.000                                        
+##  Max.   :1309.0   Max.   :3.000                                        
+##                                                                        
+##       Age            SibSp            Parch           Ticket         
+##  Min.   : 0.17   Min.   :0.0000   Min.   :0.0000   Length:418        
+##  1st Qu.:21.00   1st Qu.:0.0000   1st Qu.:0.0000   Class :character  
+##  Median :27.00   Median :0.0000   Median :0.0000   Mode  :character  
+##  Mean   :30.27   Mean   :0.4474   Mean   :0.3923                     
+##  3rd Qu.:39.00   3rd Qu.:1.0000   3rd Qu.:0.0000                     
+##  Max.   :76.00   Max.   :8.0000   Max.   :9.0000                     
+##  NA&#39;s   :86                                                          
+##       Fare            Cabin             Embarked        
+##  Min.   :  0.000   Length:418         Length:418        
+##  1st Qu.:  7.896   Class :character   Class :character  
+##  Median : 14.454   Mode  :character   Mode  :character  
+##  Mean   : 35.627                                        
+##  3rd Qu.: 31.500                                        
+##  Max.   :512.329                                        
+##  NA&#39;s   :1</code></pre>
 <pre class="r"><code>summary(train)</code></pre>
-<pre><code>##   PassengerId       Survived          Pclass     
-##  Min.   :  1.0   Min.   :0.0000   Min.   :1.000  
-##  1st Qu.:223.5   1st Qu.:0.0000   1st Qu.:2.000  
-##  Median :446.0   Median :0.0000   Median :3.000  
-##  Mean   :446.0   Mean   :0.3838   Mean   :2.309  
-##  3rd Qu.:668.5   3rd Qu.:1.0000   3rd Qu.:3.000  
-##  Max.   :891.0   Max.   :1.0000   Max.   :3.000  
-##                                                  
-##                                     Name         Sex           Age       
-##  Abbing, Mr. Anthony                  :  1   female:314   Min.   : 0.42  
-##  Abbott, Mr. Rossmore Edward          :  1   male  :577   1st Qu.:20.12  
-##  Abbott, Mrs. Stanton (Rosa Hunt)     :  1                Median :28.00  
-##  Abelson, Mr. Samuel                  :  1                Mean   :29.70  
-##  Abelson, Mrs. Samuel (Hannah Wizosky):  1                3rd Qu.:38.00  
-##  Adahl, Mr. Mauritz Nils Martin       :  1                Max.   :80.00  
-##  (Other)                              :885                NA&#39;s   :177    
-##      SibSp           Parch             Ticket         Fare       
-##  Min.   :0.000   Min.   :0.0000   1601    :  7   Min.   :  0.00  
-##  1st Qu.:0.000   1st Qu.:0.0000   347082  :  7   1st Qu.:  7.91  
-##  Median :0.000   Median :0.0000   CA. 2343:  7   Median : 14.45  
-##  Mean   :0.523   Mean   :0.3816   3101295 :  6   Mean   : 32.20  
-##  3rd Qu.:1.000   3rd Qu.:0.0000   347088  :  6   3rd Qu.: 31.00  
-##  Max.   :8.000   Max.   :6.0000   CA 2144 :  6   Max.   :512.33  
-##                                   (Other) :852                   
-##          Cabin     Embarked
-##             :687    :  2   
-##  B96 B98    :  4   C:168   
-##  C23 C25 C27:  4   Q: 77   
-##  G6         :  4   S:644   
-##  C22 C26    :  3           
-##  D          :  3           
-##  (Other)    :186</code></pre>
+<pre><code>##   PassengerId       Survived          Pclass          Name          
+##  Min.   :  1.0   Min.   :0.0000   Min.   :1.000   Length:891        
+##  1st Qu.:223.5   1st Qu.:0.0000   1st Qu.:2.000   Class :character  
+##  Median :446.0   Median :0.0000   Median :3.000   Mode  :character  
+##  Mean   :446.0   Mean   :0.3838   Mean   :2.309                     
+##  3rd Qu.:668.5   3rd Qu.:1.0000   3rd Qu.:3.000                     
+##  Max.   :891.0   Max.   :1.0000   Max.   :3.000                     
+##                                                                     
+##      Sex                 Age            SibSp           Parch       
+##  Length:891         Min.   : 0.42   Min.   :0.000   Min.   :0.0000  
+##  Class :character   1st Qu.:20.12   1st Qu.:0.000   1st Qu.:0.0000  
+##  Mode  :character   Median :28.00   Median :0.000   Median :0.0000  
+##                     Mean   :29.70   Mean   :0.523   Mean   :0.3816  
+##                     3rd Qu.:38.00   3rd Qu.:1.000   3rd Qu.:0.0000  
+##                     Max.   :80.00   Max.   :8.000   Max.   :6.0000  
+##                     NA&#39;s   :177                                     
+##     Ticket               Fare           Cabin             Embarked        
+##  Length:891         Min.   :  0.00   Length:891         Length:891        
+##  Class :character   1st Qu.:  7.91   Class :character   Class :character  
+##  Mode  :character   Median : 14.45   Mode  :character   Mode  :character  
+##                     Mean   : 32.20                                        
+##                     3rd Qu.: 31.00                                        
+##                     Max.   :512.33                                        
+## </code></pre>
 <pre class="r"><code>#We can see that survived is missing on the test data, let&#39;s input it as a NA value for now
 
 test &lt;- test %&gt;%
@@ -216,7 +201,7 @@ merge_data %&gt;%
 
 #creating a boolean variable
 
-merge_data$Cabin_Available &lt;- as.factor(!(merge_data$Cabin==&quot;&quot;))</code></pre>
+merge_data$Cabin_Available &lt;- as.factor(ifelse(is.na(merge_data$Cabin),FALSE,TRUE))</code></pre>
 <p>Fare</p>
 <pre class="r"><code>merge_data %&gt;%
   ggplot(aes(x = Fare))+
@@ -225,12 +210,12 @@ merge_data$Cabin_Available &lt;- as.factor(!(merge_data$Cabin==&quot;&quot;))</c
 <pre class="r"><code>sum(is.na(merge_data$Fare))</code></pre>
 <pre><code>## [1] 1</code></pre>
 <pre class="r"><code>merge_data[which(is.na(merge_data$Fare)),]</code></pre>
-<pre><code>##      PassengerId Survived Pclass               Name  Sex SibSp Parch
-## 1044        1044       NA      3 Storey, Mr. Thomas male     0     0
-##      Ticket Fare Cabin Embarked  Age Age_bucket Cabin_Letter
-## 1044   3701   NA              S 60.5        50+             
-##      Cabin_Available
-## 1044           FALSE</code></pre>
+<pre><code>## # A tibble: 1 x 15
+##   PassengerId Survived Pclass Name  Sex   SibSp Parch Ticket  Fare Cabin
+##         &lt;int&gt;    &lt;int&gt; &lt;fct&gt;  &lt;chr&gt; &lt;fct&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;
+## 1        1044       NA 3      Stor… male      0     0 3701      NA &lt;NA&gt; 
+## # ... with 5 more variables: Embarked &lt;chr&gt;, Age &lt;dbl&gt;, Age_bucket &lt;fct&gt;,
+## #   Cabin_Letter &lt;chr&gt;, Cabin_Available &lt;fct&gt;</code></pre>
 <pre class="r"><code>#lets replace the fare by mean of Pclass = 3
 
 merge_data[1044,]$Fare &lt;- mean(subset(merge_data,Pclass==3)$Fare,na.rm=TRUE)
@@ -264,31 +249,40 @@ merge_data$Title[merge_data$Title %in% Power_Title] &lt;- &quot;Luxurious Title&
 merge_data$Title &lt;- as.factor(merge_data$Title)</code></pre>
 <p>Embarked</p>
 <pre class="r"><code>merge_data$Embarked %&gt;% head()</code></pre>
-<pre><code>## [1] S C S S S Q
-## Levels:  C Q S</code></pre>
+<pre><code>## [1] &quot;S&quot; &quot;C&quot; &quot;S&quot; &quot;S&quot; &quot;S&quot; &quot;Q&quot;</code></pre>
 <pre class="r"><code>merge_data$Embarked &lt;- as.factor(merge_data$Embarked)
 str(merge_data)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    1309 obs. of  17 variables:
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    1309 obs. of  17 variables:
 ##  $ PassengerId    : int  1 2 3 4 5 6 7 8 9 10 ...
 ##  $ Survived       : int  0 1 1 1 0 0 0 0 1 1 ...
 ##  $ Pclass         : Factor w/ 3 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;: 3 1 3 1 3 3 1 3 3 2 ...
-##  $ Name           : Factor w/ 1307 levels &quot;Abbing, Mr. Anthony&quot;,..: 109 191 358 277 16 559 520 629 417 581 ...
+##  $ Name           : chr  &quot;Braund, Mr. Owen Harris&quot; &quot;Cumings, Mrs. John Bradley (Florence Briggs Thayer)&quot; &quot;Heikkinen, Miss. Laina&quot; &quot;Futrelle, Mrs. Jacques Heath (Lily May Peel)&quot; ...
 ##  $ Sex            : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 2 1 1 1 2 2 2 2 1 1 ...
 ##  $ SibSp          : int  1 1 0 1 0 0 0 3 0 1 ...
 ##  $ Parch          : int  0 0 0 0 0 0 0 1 2 0 ...
-##  $ Ticket         : Factor w/ 929 levels &quot;110152&quot;,&quot;110413&quot;,..: 524 597 670 50 473 276 86 396 345 133 ...
+##  $ Ticket         : chr  &quot;A/5 21171&quot; &quot;PC 17599&quot; &quot;STON/O2. 3101282&quot; &quot;113803&quot; ...
 ##  $ Fare           : num  7.25 71.28 7.92 53.1 8.05 ...
-##  $ Cabin          : Factor w/ 187 levels &quot;&quot;,&quot;A10&quot;,&quot;A14&quot;,..: 1 83 1 57 1 1 131 1 1 1 ...
-##  $ Embarked       : Factor w/ 4 levels &quot;&quot;,&quot;C&quot;,&quot;Q&quot;,&quot;S&quot;: 4 2 4 4 4 3 4 4 4 2 ...
+##  $ Cabin          : chr  NA &quot;C85&quot; NA &quot;C123&quot; ...
+##  $ Embarked       : Factor w/ 3 levels &quot;C&quot;,&quot;Q&quot;,&quot;S&quot;: 3 1 3 3 3 2 3 3 3 1 ...
 ##  $ Age            : num  22 38 26 35 35 25 54 2 27 14 ...
 ##  $ Age_bucket     : Factor w/ 6 levels &quot;&lt;12&quot;,&quot;16-21&quot;,..: 3 4 3 4 4 3 6 1 3 2 ...
-##  $ Cabin_Letter   : chr  &quot;&quot; &quot;C&quot; &quot;&quot; &quot;C&quot; ...
+##  $ Cabin_Letter   : chr  NA &quot;C&quot; NA &quot;C&quot; ...
 ##  $ Cabin_Available: Factor w/ 2 levels &quot;FALSE&quot;,&quot;TRUE&quot;: 1 2 1 2 1 1 2 1 1 1 ...
 ##  $ Fare_bucket    : Factor w/ 5 levels &quot;[ 0.00,  7.88)&quot;,..: 1 5 2 5 2 2 5 3 3 4 ...
 ##  $ Title          : Factor w/ 6 levels &quot;Luxurious Title&quot;,..: 4 5 3 5 4 4 4 2 5 5 ...</code></pre>
 <pre class="r"><code>summary(merge_data$Embarked)</code></pre>
-<pre><code>##       C   Q   S 
-##   2 270 123 914</code></pre>
+<pre><code>##    C    Q    S NA&#39;s 
+##  270  123  914    2</code></pre>
+<pre class="r"><code>merge_data[which(is.na(merge_data$Embarked)),]</code></pre>
+<pre><code>## # A tibble: 2 x 17
+##   PassengerId Survived Pclass Name  Sex   SibSp Parch Ticket  Fare Cabin
+##         &lt;int&gt;    &lt;int&gt; &lt;fct&gt;  &lt;chr&gt; &lt;fct&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;
+## 1          62        1 1      Icar… fema…     0     0 113572    80 B28  
+## 2         830        1 1      Ston… fema…     0     0 113572    80 B28  
+## # ... with 7 more variables: Embarked &lt;fct&gt;, Age &lt;dbl&gt;, Age_bucket &lt;fct&gt;,
+## #   Cabin_Letter &lt;chr&gt;, Cabin_Available &lt;fct&gt;, Fare_bucket &lt;fct&gt;,
+## #   Title &lt;fct&gt;</code></pre>
+<pre class="r"><code>merge_data[c(62,830),&quot;Embarked&quot;] &lt;- &quot;S&quot;</code></pre>
 <p>SibSp</p>
 <pre class="r"><code>merge_data$SibSp &lt;- as.factor(merge_data$SibSp)</code></pre>
 <p>Ticket</p>
@@ -301,7 +295,10 @@ merge_data &lt;- merge_data  %&gt;%
 </div>
 <div id="data-modeling" class="section level5">
 <h5>Data Modeling</h5>
-<pre class="r"><code>#resplitting the merge data
+<pre class="r"><code>merge_data &lt;- merge_data %&gt;% select(Survived,Pclass,Sex,Age_bucket,Fare_bucket, 
+    Cabin_Available,Title,Embarked,Ticketsize,SibSp)
+
+#resplitting the merge data
 train_merge &lt;- merge_data[1:891,]
 test_merge &lt;- merge_data[892:1309,]
 
@@ -313,7 +310,9 @@ smp_size &lt;- floor(0.75* nrow(train_merge))
 train_ind &lt;- sample(seq_len(nrow(train_merge)), size = smp_size)
 
 train &lt;- train_merge[train_ind, ]
-test &lt;- train_merge[-train_ind, ]</code></pre>
+test &lt;- train_merge[-train_ind, ]
+
+train$Survived &lt;- as.factor(train$Survived)</code></pre>
 <p>Logistic Regression</p>
 <pre class="r"><code>log.fit &lt;- glm(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +Cabin_Available + Title + Embarked + Ticketsize, family = binomial(link = logit), data = train)
 
@@ -326,48 +325,47 @@ summary(log.fit)</code></pre>
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -2.6555  -0.5228  -0.3730   0.5764   2.3832  
+## -2.6605  -0.5219  -0.3728   0.5767   2.3858  
 ## 
 ## Coefficients:
 ##                             Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                2.965e+01  2.064e+03   0.014 0.988537    
-## Pclass2                   -4.734e-01  6.072e-01  -0.780 0.435602    
-## Pclass3                   -1.471e+00  7.172e-01  -2.051 0.040278 *  
-## Sexmale                   -1.701e+01  1.186e+03  -0.014 0.988562    
-## Age_bucket16-21           -3.940e-01  6.916e-01  -0.570 0.568934    
-## Age_bucket21-30           -5.586e-01  6.550e-01  -0.853 0.393709    
-## Age_bucket30-40           -7.430e-01  6.855e-01  -1.084 0.278401    
-## Age_bucket40-50           -1.049e+00  7.547e-01  -1.390 0.164491    
-## Age_bucket50+             -1.780e+00  7.966e-01  -2.235 0.025415 *  
-## Fare_bucket[ 7.88, 10.52)  3.411e-01  3.813e-01   0.895 0.371030    
-## Fare_bucket[10.52, 22.02)  2.105e-01  4.471e-01   0.471 0.637714    
-## Fare_bucket[22.02, 42.40)  4.024e-01  5.740e-01   0.701 0.483282    
-## Fare_bucket[42.40,512.33]  9.585e-01  8.862e-01   1.082 0.279444    
-## Cabin_AvailableTRUE        7.037e-01  4.225e-01   1.666 0.095805 .  
-## TitleMaster                3.823e+00  1.113e+00   3.434 0.000595 ***
-## TitleMiss                 -1.325e+01  1.186e+03  -0.011 0.991086    
-## TitleMr                    9.256e-01  8.392e-01   1.103 0.270024    
-## TitleMrs                  -1.267e+01  1.186e+03  -0.011 0.991480    
-## TitleMs                    1.907e+00  2.677e+03   0.001 0.999432    
-## EmbarkedC                 -1.363e+01  1.689e+03  -0.008 0.993561    
-## EmbarkedQ                 -1.352e+01  1.689e+03  -0.008 0.993614    
-## EmbarkedS                 -1.417e+01  1.689e+03  -0.008 0.993304    
-## Ticketsize2               -5.106e-01  4.145e-01  -1.232 0.217941    
-## Ticketsize3               -9.938e-03  5.289e-01  -0.019 0.985009    
-## Ticketsize4                2.419e-01  6.942e-01   0.348 0.727549    
-## Ticketsize5               -2.147e+00  8.637e-01  -2.486 0.012912 *  
-## Ticketsize6               -3.588e+00  9.610e-01  -3.733 0.000189 ***
-## Ticketsize7               -2.101e+00  9.058e-01  -2.320 0.020340 *  
-## Ticketsize8                1.712e+00  1.164e+00   1.471 0.141277    
-## Ticketsize11              -1.687e+01  7.616e+02  -0.022 0.982323    
+## (Intercept)                 16.01336 1185.81297   0.014 0.989226    
+## Pclass2                     -0.47129    0.60763  -0.776 0.437969    
+## Pclass3                     -1.46573    0.71757  -2.043 0.041088 *  
+## Sexmale                    -17.00320 1185.81286  -0.014 0.988560    
+## Age_bucket16-21             -0.39725    0.69179  -0.574 0.565808    
+## Age_bucket21-30             -0.56230    0.65494  -0.859 0.390592    
+## Age_bucket30-40             -0.74344    0.68532  -1.085 0.278012    
+## Age_bucket40-50             -1.05592    0.75473  -1.399 0.161796    
+## Age_bucket50+               -1.77229    0.79633  -2.226 0.026044 *  
+## Fare_bucket[ 7.88, 10.52)    0.33903    0.38161   0.888 0.374309    
+## Fare_bucket[10.52, 22.02)    0.20834    0.44760   0.465 0.641612    
+## Fare_bucket[22.02, 42.40)    0.40374    0.57457   0.703 0.482251    
+## Fare_bucket[42.40,512.33]    0.97666    0.88614   1.102 0.270394    
+## Cabin_AvailableTRUE          0.70778    0.42270   1.674 0.094044 .  
+## TitleMaster                  3.83349    1.11306   3.444 0.000573 ***
+## TitleMiss                  -13.24423 1185.81262  -0.011 0.991089    
+## TitleMr                      0.92542    0.83912   1.103 0.270092    
+## TitleMrs                   -12.65381 1185.81265  -0.011 0.991486    
+## TitleMs                      1.91717 2676.55870   0.001 0.999428    
+## EmbarkedQ                    0.11511    0.48606   0.237 0.812795    
+## EmbarkedS                   -0.53921    0.29872  -1.805 0.071065 .  
+## Ticketsize2                 -0.51018    0.41490  -1.230 0.218829    
+## Ticketsize3                 -0.01865    0.52926  -0.035 0.971886    
+## Ticketsize4                  0.23315    0.69515   0.335 0.737325    
+## Ticketsize5                 -2.16015    0.86435  -2.499 0.012448 *  
+## Ticketsize6                 -3.60736    0.96102  -3.754 0.000174 ***
+## Ticketsize7                 -2.11423    0.90612  -2.333 0.019634 *  
+## Ticketsize8                  1.69420    1.16373   1.456 0.145436    
+## Ticketsize11               -16.89587  761.09246  -0.022 0.982289    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 896.48  on 667  degrees of freedom
-## Residual deviance: 540.69  on 638  degrees of freedom
-## AIC: 600.69
+## Residual deviance: 541.04  on 639  degrees of freedom
+## AIC: 599.04
 ## 
 ## Number of Fisher Scoring iterations: 15</code></pre>
 <pre class="r"><code>log_prediction &lt;- predict(log.fit, newdata = test, type = &quot;response&quot;)
@@ -377,7 +375,7 @@ logistic_accuracy &lt;- 1 - logistic_classification_error
 
 library(formattable)
 print(paste0(&quot;The Accuracy for the Logistic Regression is: &quot;, percent(logistic_accuracy)))</code></pre>
-<pre><code>## [1] &quot;The Accuracy for the Logistic Regression is: 84.75%&quot;</code></pre>
+<pre><code>## [1] &quot;The Accuracy for the Logistic Regression is: 83.86%&quot;</code></pre>
 </div>
 <div id="lets-use-the-caret-package-to-improvde-our-predictive-abilities-by-using-10-fold-cross-validation" class="section level5">
 <h5>Let’s use the Caret package to improvde our predictive abilities by using 10-fold cross validation</h5>
@@ -385,7 +383,7 @@ print(paste0(&quot;The Accuracy for the Logistic Regression is: &quot;, percent(
 metric &lt;- &quot;Accuracy&quot;</code></pre>
 <p>Logistic Regression</p>
 <pre class="r"><code>set.seed(123)
-logistic.fit_2 &lt;- train(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +Cabin_Available + Title + Embarked + SibSp, data = train, method = &quot;glm&quot;, metric = metric , trControl = trainControl)</code></pre>
+logistic.fit_2 &lt;- train(Survived ~ Pclass + Sex + Age_bucket+ Fare_bucket +  Title + Embarked + SibSp, data = train, method = &quot;glm&quot;, metric = metric , trControl = trainControl)</code></pre>
 <p>KNN</p>
 <pre class="r"><code>library(caret)
 set.seed(123)
@@ -432,26 +430,26 @@ summary(results)</code></pre>
 ## 
 ## Accuracy 
 ##                          Min.   1st Qu.    Median      Mean   3rd Qu.
-## Logistic_Regression 0.6716418 0.7712906 0.8120760 0.8014830 0.8333333
-## KNN                 0.6865672 0.7479947 0.7910448 0.7905373 0.8333333
-## NB                  0.5970149 0.6185383 0.6417910 0.6447850 0.6679104
-## SVM                 0.6865672 0.7886703 0.8088235 0.8129571 0.8501809
+## Logistic_Regression 0.6417910 0.7735753 0.8030303 0.7979853 0.8302239
+## KNN                 0.6865672 0.7611940 0.7985740 0.7939678 0.8308824
+## NB                  0.6029412 0.6176471 0.6390773 0.6477776 0.6716418
+## SVM                 0.6865672 0.7918130 0.8059701 0.8139669 0.8446970
 ##                          Max. NA&#39;s
 ## Logistic_Regression 0.8656716    0
 ## KNN                 0.8955224    0
-## NB                  0.7462687    0
-## SVM                 0.8939394    0
+## NB                  0.7761194    0
+## SVM                 0.8955224    0
 ## 
 ## Kappa 
-##                          Min.    1st Qu.    Median      Mean   3rd Qu.
-## Logistic_Regression 0.3092784 0.52664049 0.5967321 0.5826311 0.6481626
-## KNN                 0.3446670 0.47209490 0.5527221 0.5510220 0.6368411
-## NB                  0.0000000 0.04480394 0.1112105 0.1191201 0.1795026
-## SVM                 0.3366337 0.55693939 0.5929342 0.6010410 0.6753950
+##                          Min.    1st Qu.     Median      Mean   3rd Qu.
+## Logistic_Regression 0.2555556 0.53229349 0.58748131 0.5759262 0.6353576
+## KNN                 0.3446670 0.49402964 0.57015499 0.5594179 0.6313138
+## NB                  0.0000000 0.04432432 0.09214695 0.1289352 0.1948945
+## SVM                 0.3366337 0.56057328 0.59431765 0.6024010 0.6599500
 ##                          Max. NA&#39;s
-## Logistic_Regression 0.7121718    0
+## Logistic_Regression 0.7163324    0
 ## KNN                 0.7752755    0
-## NB                  0.4125838    0
+## NB                  0.4885496    0
 ## SVM                 0.7793696    0</code></pre>
 <pre class="r"><code>dotplot(results)</code></pre>
 <p><img src="/post/Titanic_Survival_files/figure-html/unnamed-chunk-26-1.png" width="672" /> From the plot above, we can see that SVm has a the highest accuracy</p>
@@ -479,43 +477,43 @@ print(svm.fit_2)</code></pre>
 ##   0.005   1  0.8064433  0.5882477
 ##   0.005   2  0.8084187  0.5920974
 ##   0.005   3  0.8084187  0.5920974
-##   0.005   4  0.8064433  0.5882477
-##   0.005   5  0.8089386  0.5934264
+##   0.005   4  0.8069335  0.5891977
+##   0.005   5  0.8104240  0.5967106
 ##   0.005   6  0.8084335  0.5929460
 ##   0.005   7  0.8084335  0.5929460
-##   0.005   8  0.8074385  0.5910867
-##   0.005   9  0.8069410  0.5901764
-##   0.005  10  0.8059384  0.5879319
+##   0.005   8  0.8084335  0.5929460
+##   0.005   9  0.8079433  0.5919960
+##   0.005  10  0.8074458  0.5907116
 ##   0.010   1  0.8084187  0.5920974
-##   0.010   2  0.8084335  0.5929460
-##   0.010   3  0.8064435  0.5888920
-##   0.010   4  0.8089836  0.5933946
-##   0.010   5  0.8099414  0.5955983
-##   0.010   6  0.8089612  0.5927757
-##   0.010   7  0.8079737  0.5896887
-##   0.010   8  0.8059761  0.5847156
-##   0.010   9  0.8059613  0.5849894
-##   0.010  10  0.8014458  0.5754778
-##   0.015   1  0.8084187  0.5920974
-##   0.015   2  0.8074908  0.5904415
-##   0.015   3  0.8094514  0.5943612
-##   0.015   4  0.8059686  0.5850598
-##   0.015   5  0.7999603  0.5720062
-##   0.015   6  0.8009482  0.5748111
-##   0.015   7  0.7984605  0.5696365
-##   0.015   8  0.7989657  0.5711440
-##   0.015   9  0.7974878  0.5689145
-##   0.015  10  0.7969826  0.5679644
-##   0.020   1  0.8054631  0.5862188
-##   0.020   2  0.8089466  0.5933911
-##   0.020   3  0.8039632  0.5816605
-##   0.020   4  0.8019657  0.5773838
-##   0.020   5  0.7994779  0.5731117
-##   0.020   6  0.7974951  0.5692218
-##   0.020   7  0.7980150  0.5706871
-##   0.020   8  0.7979851  0.5708311
-##   0.020   9  0.7994706  0.5744198
-##   0.020  10  0.7995005  0.5742534
+##   0.010   2  0.8079433  0.5919960
+##   0.010   3  0.8069556  0.5897778
+##   0.010   4  0.8109887  0.5973230
+##   0.010   5  0.8129269  0.6012344
+##   0.010   6  0.8104318  0.5953686
+##   0.010   7  0.8089763  0.5915943
+##   0.010   8  0.8059686  0.5842785
+##   0.010   9  0.8074913  0.5879227
+##   0.010  10  0.8029684  0.5782804
+##   0.015   1  0.8074383  0.5902136
+##   0.015   2  0.8099862  0.5952770
+##   0.015   3  0.8109145  0.5971580
+##   0.015   4  0.8074984  0.5879617
+##   0.015   5  0.8034957  0.5795312
+##   0.015   6  0.8019437  0.5764796
+##   0.015   7  0.8014387  0.5755482
+##   0.015   8  0.7999457  0.5732824
+##   0.015   9  0.8009633  0.5760061
+##   0.015  10  0.8009558  0.5762771
+##   0.020   1  0.8069483  0.5889880
+##   0.020   2  0.8104245  0.5963789
+##   0.020   3  0.8055083  0.5843859
+##   0.020   4  0.8024488  0.5777598
+##   0.020   5  0.8024485  0.5788391
+##   0.020   6  0.8019586  0.5782266
+##   0.020   7  0.8034810  0.5822925
+##   0.020   8  0.8044763  0.5842724
+##   0.020   9  0.8034662  0.5822480
+##   0.020  10  0.8039861  0.5835940
 ## 
 ## Accuracy was used to select the optimal model using the largest value.
 ## The final values used for the model were sigma = 0.01 and C = 5.</code></pre>
@@ -534,28 +532,28 @@ print(rf.fit)</code></pre>
 ##                      Number of trees: 500
 ## No. of variables tried at each split: 2
 ## 
-##         OOB estimate of  error rate: 17.96%
+##         OOB estimate of  error rate: 18.41%
 ## Confusion matrix:
 ##     0   1 class.error
-## 0 362  42   0.1039604
-## 1  78 186   0.2954545</code></pre>
+## 0 361  43   0.1064356
+## 1  80 184   0.3030303</code></pre>
 <p>Based on the summary, the random forest model gives us an accuracy of 80.1%</p>
 <pre class="r"><code>plot(rf.fit)</code></pre>
 <p><img src="/post/Titanic_Survival_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <pre class="r"><code>importance(rf.fit)</code></pre>
 <pre><code>##                 MeanDecreaseGini
-## Pclass                 14.491398
-## Sex                    42.981936
-## Age_bucket             11.592343
-## Fare_bucket            13.527986
-## Cabin_Available        10.630752
-## Title                  45.943273
-## Embarked                6.050864
-## Ticketsize             18.833730</code></pre>
+## Pclass                 15.094161
+## Sex                    41.581258
+## Age_bucket             11.234586
+## Fare_bucket            13.705522
+## Cabin_Available        11.176175
+## Title                  47.243331
+## Embarked                6.103164
+## Ticketsize             17.908145</code></pre>
 <pre class="r"><code>rf.fit$confusion</code></pre>
 <pre><code>##     0   1 class.error
-## 0 362  42   0.1039604
-## 1  78 186   0.2954545</code></pre>
+## 0 361  43   0.1064356
+## 1  80 184   0.3030303</code></pre>
 <p>Based on the random forest variable importance, lets only keep the following: Pclass + Sex + Age_bucket+ Fare_bucket Title + Ticketsize</p>
 <pre class="r"><code>rf.fit2 &lt;- randomForest(factor(Survived) ~Pclass + Sex + Fare_bucket + Cabin_Available + Ticketsize + Embarked + Title ,
                               data = train, nodesize=20)
@@ -563,7 +561,7 @@ print(rf.fit)</code></pre>
 rf.fit2$confusion</code></pre>
 <pre><code>##     0   1 class.error
 ## 0 365  39  0.09653465
-## 1  84 180  0.31818182</code></pre>
+## 1  86 178  0.32575758</code></pre>
 </div>
 <div id="conclusion-logistic-regression-is-the-winner" class="section level5">
 <h5>Conclusion: Logistic Regression is the winner</h5>
@@ -579,5 +577,5 @@ submission %&gt;% head()</code></pre>
 ## 895         895        0
 ## 896         896        1
 ## 897         897        0</code></pre>
-<pre class="r"><code>write.csv(submission, file = &quot;fourth_submission.csv&quot;, row.names = FALSE)</code></pre>
+<pre class="r"><code>#write.csv(submission, file = &quot;fourth_submission.csv&quot;, row.names = FALSE)</code></pre>
 </div>

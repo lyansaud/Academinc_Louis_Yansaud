@@ -29,7 +29,7 @@ setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_token_se
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/post/titanic_survival/</guid>
-      <description>Loading Data set and libraries library(dplyr) library(ggplot2) library(stringr) library(caret) library(Hmisc) library(randomForest) setwd(&amp;quot;~/Louis-Academic/data&amp;quot;) train &amp;lt;- read.csv(&amp;quot;train.csv&amp;quot;) test &amp;lt;- read.csv(&amp;quot;test.csv&amp;quot;)  Data exploration summary(test) ## PassengerId Pclass ## Min. : 892.0 Min. :1.000 ## 1st Qu.: 996.2 1st Qu.:1.000 ## Median :1100.5 Median :3.000 ## Mean :1100.5 Mean :2.266 ## 3rd Qu.:1204.8 3rd Qu.:3.000 ## Max. :1309.0 Max. :3.000 ## ## Name Sex ## Abbott, Master. Eugene Joseph : 1 female:152 ## Abelseth, Miss.</description>
+      <description>Loading Data set and libraries library(dplyr) library(ggplot2) library(stringr) library(caret) library(Hmisc) library(randomForest) library(readr) train &amp;lt;- read_csv(&amp;quot;../../data/train.csv&amp;quot;) test &amp;lt;- read_csv(&amp;quot;../../data/test.csv&amp;quot;)  Data exploration summary(test) ## PassengerId Pclass Name Sex ## Min. : 892.0 Min. :1.000 Length:418 Length:418 ## 1st Qu.: 996.2 1st Qu.:1.000 Class :character Class :character ## Median :1100.5 Median :3.000 Mode :character Mode :character ## Mean :1100.5 Mean :2.266 ## 3rd Qu.:1204.8 3rd Qu.:3.000 ## Max. :1309.0 Max. :3.000 ## ## Age SibSp Parch Ticket ## Min.</description>
     </item>
     
     <item>
@@ -39,8 +39,8 @@ setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_token_se
       
       <guid>/post/twitter_sentiment_analysis/</guid>
       <description>From my previous post, I first performed extensive data cleaning in order to analyze the sentiment of each individual cryptocurrency. Here is the result of my analysis.
-library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra) library(data.table) knitr::opts_chunk$set(warning = FALSE, message = FALSE) setwd(&amp;quot;~/Louis-Academic/data&amp;quot;) WordClouds and D3WordClouds Bitcoin
-library(d3wordcloud) big_data_clean_2 &amp;lt;- read.csv(&amp;quot;big_data_clean_2.csv&amp;quot;) bitcoin_words &amp;lt;- big_data_clean_2 %&amp;gt;% filter(coin == &amp;quot;bitcoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count)) set.</description>
+library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra) library(data.table) library(readr) knitr::opts_chunk$set(warning = FALSE, message = FALSE) WordClouds and D3WordClouds Bitcoin
+library(d3wordcloud) big_data_clean_2 &amp;lt;- read_csv(&amp;quot;../../data/big_data_clean_2.csv&amp;quot;) bitcoin_words &amp;lt;- big_data_clean_2 %&amp;gt;% filter(coin == &amp;quot;bitcoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count)) set.</description>
     </item>
     
   </channel>
