@@ -7,7 +7,6 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Mon, 20 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/sentiment-analysis/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,11 +14,11 @@
     <item>
       <title>Twitter Sentiment Analysis</title>
       <link>/post/twitter_sentiment_analysis/</link>
-      <pubDate>Mon, 20 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/post/twitter_sentiment_analysis/</guid>
       <description>From my previous post, I first performed extensive data cleaning in order to analyze the sentiment of each individual cryptocurrency. Here is the result of my analysis.
-library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra) knitr::opts_chunk$set(warning = FALSE, message = FALSE) WordClouds and D3WordClouds Bitcoin
+library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra) library(data.table) knitr::opts_chunk$set(warning = FALSE, message = FALSE) WordClouds and D3WordClouds Bitcoin
 library(d3wordcloud) big_data_clean_2 &amp;lt;- read.csv(&amp;quot;big_data_clean_2.csv&amp;quot;) bitcoin_words &amp;lt;- big_data_clean_2 %&amp;gt;% filter(coin == &amp;quot;bitcoin&amp;quot;) %&amp;gt;% select(words,words_count) %&amp;gt;% arrange(desc(words_count)) set.</description>
     </item>
     

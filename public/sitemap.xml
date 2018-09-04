@@ -4,14 +4,6 @@
     
     <url>
     
-      <loc>/post/twitter_sentiment_analysis/</loc>
-      <lastmod>2018-08-20T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
       <loc>/post/web-scraping-twitter/</loc>
       <lastmod>2018-08-13T00:00:00-07:00</lastmod>
     </url>
@@ -22,14 +14,6 @@
     
       <loc>/privacy/</loc>
       <lastmod>2018-06-28T00:00:00-07:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
-      <loc>/post/titanic_survival/</loc>
-      <lastmod>2018-01-20T00:00:00+00:00</lastmod>
     </url>
     
   
@@ -152,7 +136,6 @@
     <url>
     
       <loc>/tags/data-analysis/</loc>
-      <lastmod>2018-01-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -206,7 +189,6 @@
     <url>
     
       <loc>/categories/r/</loc>
-      <lastmod>2018-08-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -215,7 +197,6 @@
     <url>
     
       <loc>/tags/r-markdown/</loc>
-      <lastmod>2018-08-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -224,7 +205,6 @@
     <url>
     
       <loc>/tags/sentiment-analysis/</loc>
-      <lastmod>2018-08-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -233,7 +213,7 @@
     <url>
     
       <loc>/tags/supervised-machine-learning/</loc>
-      <lastmod>2018-01-20T00:00:00+00:00</lastmod>
+      <lastmod>2016-04-27T00:00:00-07:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -250,6 +230,20 @@
     
     <url>
     
+      <loc>/post/titanic_survival/</loc>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>/post/twitter_sentiment_analysis/</loc>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>/tags/unsupervised-machine-learning/</loc>
       <lastmod>2016-04-27T00:00:00-07:00</lastmod>
       <priority>0</priority>
@@ -260,7 +254,6 @@
     <url>
     
       <loc>/tags/web-scraping-analysis/</loc>
-      <lastmod>2018-08-20T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

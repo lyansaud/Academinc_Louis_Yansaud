@@ -13,7 +13,7 @@ weight = 3
 #   Deactivate an option by commenting out the line, prefixing it with `#`.
 [header]
   overlay_color = "#666"  # An HTML color value.
-  overlay_img = "blockchain.jpg"  # Image path relative to your `static/img/` folder.
+  overlay_img = "abstract-ai-art-373543.jpg"  # Image path relative to your `static/img/` folder.
   overlay_filter = 0.55  # Darken the image. Value in range 0-1.
 
 # Call to action button (optional).
@@ -21,7 +21,7 @@ weight = 3
 #   Deactivate by commenting out parameters, prefixing lines with `#`.
 [cta]
   url = "https://drive.google.com/open?id=1elzuswEmnR90O2PtxWdz5sA6r9LwuAKa"
-  label = '<i class="fa fa-download"></i> Download my CV'
+  label = '<i class="fa fa-download"></i> Download my Resume'
 +++
 
 Welcome to my Academic website! I customized my website using Rstudio, Blogdown, and HTML! I love programming in R!

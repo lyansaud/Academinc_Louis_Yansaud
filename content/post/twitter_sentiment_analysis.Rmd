@@ -22,8 +22,11 @@ library(ggplot2)
 library(ggthemes)
 library(data.table)
 library(gridExtra)
+library(data.table)
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+
+
 ```
 
 ##### WordClouds and D3WordClouds

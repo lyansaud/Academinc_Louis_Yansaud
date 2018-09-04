@@ -297,7 +297,7 @@ enableGitInfo = false
 # Link to a PDF of your resume/CV from the menu.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
  [[menu.main]]
-   name = "CV"
+   name = "Resume"
    url = "files/louis_yansaud_cv.pdf"
    pre = "<i class=\"sidebar-button-icon fa fa-lg fa-briefcase\"></i>"
    weight = 5
