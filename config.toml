@@ -231,22 +231,22 @@ enableGitInfo = false
 
   [[params.social]]
     icon = "envelope"
-    icon_pack = "fa"
+    icon_pack = "fas"
     link = "mailto:louistaylor91@gmail.com"
 
   [[params.social]]
     icon = "linkedin"
-    icon_pack = "fa"
+    icon_pack = "fab"
     link = "//linkedin.com/in/louisyansaud"
 
   [[params.social]]
     icon = "google-plus"
-    icon_pack = "fa"
+    icon_pack = "fab"
     link = "//plus.google.com/+LouisChinFoo"
 
   [[params.social]]
     icon = "github"
-    icon_pack = "fa"
+    icon_pack = "fab"
     link = "//github.com/lyansaud"
 
   # Link to a PDF of your resume/CV from the About widget.
