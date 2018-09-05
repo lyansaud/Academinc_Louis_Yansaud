@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jan 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/supervised-machine-learning/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Titanic_Survival</title>
+      <link>/post/titanic_survival/</link>
+      <pubDate>Sat, 20 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/titanic_survival/</guid>
+      <description>Loading Data set and libraries library(dplyr) library(ggplot2) library(stringr) library(caret) library(Hmisc) library(randomForest) library(readr) train &amp;lt;- read_csv(&amp;quot;../../static/data/train.csv&amp;quot;) test &amp;lt;- read_csv(&amp;quot;../../static/data/test.csv&amp;quot;)  Data exploration summary(test) ## PassengerId Pclass Name Sex ## Min. : 892.0 Min. :1.000 Length:418 Length:418 ## 1st Qu.: 996.2 1st Qu.:1.000 Class :character Class :character ## Median :1100.5 Median :3.000 Mode :character Mode :character ## Mean :1100.5 Mean :2.266 ## 3rd Qu.:1204.8 3rd Qu.:3.000 ## Max. :1309.0 Max. :3.000 ## ## Age SibSp Parch Ticket ## Min.</description>
+    </item>
     
     <item>
       <title>Fraud Analytics: Fraud Detection Model</title>
@@ -20,15 +29,6 @@
       <guid>/project/supervised-learning/</guid>
       <description>Description This report provides a detailed analysis of the ‘applications’ dataset using supervised fraud algorithms and machine learning statistical techniques. The programming tools used for Data Cleaning, Modeling, and Evaluation were Microsoft Excel, Tableau, R, along with mySQL through R. The original dataset contains unique records of more 90,000 product applications over the year 2016. Necessary feature analysis include:
  Data Understanding and Data Cleaning (dealing with frivolous values) Feature Engineering (creating expert Variables, performing feature selection) Data Modeling (running fraud detection models) Data Evaluation (comparing model results)  Project Goal Our objective for this project is to use a supervised fraud algorithm to build a fraud detection model that predicts product application fraud with high predictive accuracy.</description>
-    </item>
-    
-    <item>
-      <title>Titanic_Survival</title>
-      <link>/post/titanic_survival/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/post/titanic_survival/</guid>
-      <description>Loading Data set and libraries library(dplyr) library(ggplot2) library(stringr) library(caret) library(Hmisc) library(randomForest) library(readr) train &amp;lt;- read_csv(&amp;quot;../../static/data/train.csv&amp;quot;) test &amp;lt;- read_csv(&amp;quot;../../static/data/test.csv&amp;quot;)  Data exploration summary(test) ## PassengerId Pclass Name Sex ## Min. : 892.0 Min. :1.000 Length:418 Length:418 ## 1st Qu.: 996.2 1st Qu.:1.000 Class :character Class :character ## Median :1100.5 Median :3.000 Mode :character Mode :character ## Mean :1100.5 Mean :2.266 ## 3rd Qu.:1204.8 3rd Qu.:3.000 ## Max. :1309.0 Max. :3.000 ## ## Age SibSp Parch Ticket ## Min.</description>
     </item>
     
   </channel>
