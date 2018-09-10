@@ -711,7 +711,7 @@ print(paste0(&quot;The Accuracy for the Logistic Regression is: &quot;, percent(
 <pre><code>## [1] &quot;The Accuracy for the Logistic Regression is: 83.86%&quot;</code></pre>
 </div>
 <div id="lets-use-the-caret-package-to-improvde-our-predictive-abilities-by-using-10-fold-cross-validation" class="section level5">
-<h5>Let’s use the Caret package to improvde our predictive abilities by using 10-fold cross validation</h5>
+<h5>Let’s use the Caret package to improve our predictive abilities by using 10-fold cross validation</h5>
 <pre class="r"><code>trainControl &lt;- trainControl(method = &quot;repeatedcv&quot;, number = 10, repeats = 3)
 metric &lt;- &quot;Accuracy&quot;</code></pre>
 <p>Logistic Regression</p>

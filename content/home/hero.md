@@ -24,5 +24,5 @@ weight = 3
   label = '<i class="fa fa-download"></i> Download my Resume'
 +++
 
-Welcome to my Academic website! I customized my website using Rstudio, Blogdown, and HTML! I love programming in R!
+I am a self-motivated data enthusiast with professional experience in data analysis, data visualization and machine learning. I love programming in R!
 

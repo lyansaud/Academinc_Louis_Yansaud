@@ -727,7 +727,7 @@ print(paste0(&amp;quot;The Accuracy for the Logistic Regression is: &amp;quot;, 
 &lt;pre&gt;&lt;code&gt;## [1] &amp;quot;The Accuracy for the Logistic Regression is: 83.86%&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;div id=&#34;lets-use-the-caret-package-to-improvde-our-predictive-abilities-by-using-10-fold-cross-validation&#34; class=&#34;section level5&#34;&gt;
-&lt;h5&gt;Let’s use the Caret package to improvde our predictive abilities by using 10-fold cross validation&lt;/h5&gt;
+&lt;h5&gt;Let’s use the Caret package to improve our predictive abilities by using 10-fold cross validation&lt;/h5&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;trainControl &amp;lt;- trainControl(method = &amp;quot;repeatedcv&amp;quot;, number = 10, repeats = 3)
 metric &amp;lt;- &amp;quot;Accuracy&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Logistic Regression&lt;/p&gt;
