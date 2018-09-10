@@ -15,7 +15,7 @@ weight = 5
     "Cryptocurrency",
     "Marketing Analytics",
     "Fraud Analytics",
-    "People Analytics"
+    "People Analytics",
     "Healthcare Analytics"
   ]
 
