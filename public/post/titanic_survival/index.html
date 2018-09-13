@@ -88,7 +88,7 @@
   
   <meta property="og:site_name" content="Louis Yansaud">
   <meta property="og:url" content="/post/titanic_survival/">
-  <meta property="og:title" content="Titanic_Survival | Louis Yansaud">
+  <meta property="og:title" content="Titanic Survival | Louis Yansaud">
   <meta property="og:description" content="In this Kaggle Challenge, we apply the tools of machine learning to predict which passengers survived the tragedy."><meta property="og:image" content="/img/headers/titanic_survival.jpg">
   <meta property="og:locale" content="en-us">
   
@@ -101,7 +101,7 @@
 
   
 
-  <title>Titanic_Survival | Louis Yansaud</title>
+  <title>Titanic Survival | Louis Yansaud</title>
 
 </head>
 <body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
@@ -250,7 +250,7 @@
 
 
   <div class="article-container">
-    <h1 itemprop="name">Titanic_Survival</h1>
+    <h1 itemprop="name">Titanic Survival</h1>
 
     
 
@@ -303,7 +303,7 @@
   <ul class="share">
     <li>
       <a class="twitter"
-         href="https://twitter.com/intent/tweet?text=Titanic_Survival&amp;url=%2fpost%2ftitanic_survival%2f"
+         href="https://twitter.com/intent/tweet?text=Titanic%20Survival&amp;url=%2fpost%2ftitanic_survival%2f"
          target="_blank" rel="noopener">
         <i class="fab fa-twitter"></i>
       </a>
@@ -317,21 +317,21 @@
     </li>
     <li>
       <a class="linkedin"
-         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2ftitanic_survival%2f&amp;title=Titanic_Survival"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2ftitanic_survival%2f&amp;title=Titanic%20Survival"
          target="_blank" rel="noopener">
         <i class="fab fa-linkedin-in"></i>
       </a>
     </li>
     <li>
       <a class="weibo"
-         href="http://service.weibo.com/share/share.php?url=%2fpost%2ftitanic_survival%2f&amp;title=Titanic_Survival"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2ftitanic_survival%2f&amp;title=Titanic%20Survival"
          target="_blank" rel="noopener">
         <i class="fab fa-weibo"></i>
       </a>
     </li>
     <li>
       <a class="email"
-         href="mailto:?subject=Titanic_Survival&amp;body=%2fpost%2ftitanic_survival%2f">
+         href="mailto:?subject=Titanic%20Survival&amp;body=%2fpost%2ftitanic_survival%2f">
         <i class="fas fa-envelope"></i>
       </a>
     </li>
@@ -416,7 +416,7 @@ test &lt;- read_csv(&quot;../../static/data/test.csv&quot;)</code></pre>
 test &lt;- test %&gt;%
   mutate(Survived = NA)
 
-#Lets merge the two dataset together for data wrangling/cleaning
+#let's merge the two dataset together for data wrangling/cleaning
 merge_data &lt;- rbind(train, test)
 
 #Checking if there are no duplicates
@@ -436,7 +436,7 @@ length(unique(merge_data$PassengerId)) == 891 + 418</code></pre>
   scale_fill_discrete(name = &#39;Survived&#39;)+
   xlab(&quot;Pclass&quot;)</code></pre>
 <p><img src="/post/Titanic_Survival_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>LOoking at the Survived by Sibsp</p>
+<p>Looking at the Survived by Sibsp</p>
 <pre class="r"><code>train %&gt;%
   ggplot(aes(x = as.factor(SibSp), fill = as.factor(Survived)))+
   geom_bar()+
@@ -466,13 +466,13 @@ length(unique(merge_data$PassengerId)) == 891 + 418</code></pre>
 <p><img src="/post/Titanic_Survival_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <div id="data-understanding-and-data-cleaning" class="section level6">
 <h6>Data understanding and Data cleaning</h6>
-<p>Lets group the age into bucket</p>
-<pre class="r"><code>#Lets convert some of the columns name into factors
+<p>let's group the age into bucket</p>
+<pre class="r"><code>#let's convert some of the columns name into factors
 
 merge_data$Sex &lt;- as.factor(merge_data$Sex)
 merge_data$Pclass &lt;- as.factor(merge_data$Pclass)
 
-#First lets replace the missing values of age by the mean of the subgroup by pclass since it has no missing values 
+#First let's replace the missing values of age by the mean of the subgroup by pclass since it has no missing values 
 
 merge_data %&gt;%
   filter(!is.na(Age)) %&gt;%
@@ -488,7 +488,7 @@ merge_data %&gt;%
 # 2                 30
 # 3                 25
 
-#now lets replace the missing age values
+#now let's replace the missing age values
 
 merge_data_missing_age &lt;- merge_data %&gt;%
                             filter(is.na(Age)) %&gt;%
@@ -527,7 +527,7 @@ merge_data %&gt;%
   scale_fill_discrete(name = &#39;Survived&#39;)+
   xlab(&quot;Age Bucket&quot;)</code></pre>
 <p><img src="/post/Titanic_Survival_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<p>Lets extract the first letter from the Cabin</p>
+<p>Let's extract the first letter from the Cabin</p>
 <pre class="r"><code>length(unique(merge_data$Cabin))</code></pre>
 <pre><code>## [1] 187</code></pre>
 <pre class="r"><code>merge_data$Cabin_Letter &lt;- str_sub(merge_data$Cabin,1,1)
@@ -549,7 +549,7 @@ merge_data$Cabin_Available &lt;- as.factor(ifelse(is.na(merge_data$Cabin),FALSE,
 ## 1        1044       NA 3      Stor… male      0     0 3701      NA &lt;NA&gt; 
 ## # ... with 5 more variables: Embarked &lt;chr&gt;, Age &lt;dbl&gt;, Age_bucket &lt;fct&gt;,
 ## #   Cabin_Letter &lt;chr&gt;, Cabin_Available &lt;fct&gt;</code></pre>
-<pre class="r"><code>#lets replace the fare by mean of Pclass = 3
+<pre class="r"><code>#let's replace the fare by mean of Pclass = 3
 
 merge_data[1044,]$Fare &lt;- mean(subset(merge_data,Pclass==3)$Fare,na.rm=TRUE)
 
@@ -710,7 +710,7 @@ library(formattable)
 print(paste0(&quot;The Accuracy for the Logistic Regression is: &quot;, percent(logistic_accuracy)))</code></pre>
 <pre><code>## [1] &quot;The Accuracy for the Logistic Regression is: 83.86%&quot;</code></pre>
 </div>
-<div id="lets-use-the-caret-package-to-improvde-our-predictive-abilities-by-using-10-fold-cross-validation" class="section level5">
+<div id="let's-use-the-caret-package-to-improvde-our-predictive-abilities-by-using-10-fold-cross-validation" class="section level5">
 <h5>Let’s use the Caret package to improve our predictive abilities by using 10-fold cross validation</h5>
 <pre class="r"><code>trainControl &lt;- trainControl(method = &quot;repeatedcv&quot;, number = 10, repeats = 3)
 metric &lt;- &quot;Accuracy&quot;</code></pre>
@@ -785,10 +785,10 @@ summary(results)</code></pre>
 ## NB                  0.4885496    0
 ## SVM                 0.7793696    0</code></pre>
 <pre class="r"><code>dotplot(results)</code></pre>
-<p><img src="/post/Titanic_Survival_files/figure-html/unnamed-chunk-26-1.png" width="672" /> From the plot above, we can see that SVm has a the highest accuracy</p>
+<p><img src="/post/Titanic_Survival_files/figure-html/unnamed-chunk-26-1.png" width="672" /> From the plot above, we can see that SVM has the highest accuracy</p>
 </div>
 <div id="svm-algorithm-tuning" class="section level5">
-<h5>SVM Algorithm tuning</h5>
+<h5>SVM Algorithm Tuning</h5>
 <pre class="r"><code>grid &lt;- expand.grid(.sigma=c(0.005, 0.01, 0.015, 0.02), .C=seq(1, 10, by=1))
 
 set.seed(1234)
@@ -887,7 +887,7 @@ print(rf.fit)</code></pre>
 <pre><code>##     0   1 class.error
 ## 0 361  43   0.1064356
 ## 1  80 184   0.3030303</code></pre>
-<p>Based on the random forest variable importance, lets only keep the following: Pclass + Sex + Age_bucket+ Fare_bucket Title + Ticketsize</p>
+<p>Based on the random forest variable importance, let's only keep the following: Pclass + Sex + Age_bucket+ Fare_bucket Title + Ticketsize</p>
 <pre class="r"><code>rf.fit2 &lt;- randomForest(factor(Survived) ~Pclass + Sex + Fare_bucket + Cabin_Available + Ticketsize + Embarked + Title ,
                               data = train, nodesize=20)
 

@@ -152,7 +152,7 @@ library(gridExtra)
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h5 id=&#34;built-funcrion-for-web-scraping-analysis&#34;&gt;Built-funcrion for Web Scraping Analysis&lt;/h5&gt;
+&lt;h5 id=&#34;built-in-function-for-web-scraping-analysis&#34;&gt;Built-in Function for Web Scraping Analysis&lt;/h5&gt;
 
 &lt;p&gt;I built a function to do some web-scraping analysis in order to facilitate the extraction of Twitter data.&lt;/p&gt;
 
@@ -356,7 +356,7 @@ data_crypto_sentiment &amp;lt;- read.csv(&#39;data_crypto_sentiment.csv&#39;)
     </item>
     
     <item>
-      <title>Titanic_Survival</title>
+      <title>Titanic Survival</title>
       <link>/post/titanic_survival/</link>
       <pubDate>Sat, 20 Jan 2018 00:00:00 +0000</pubDate>
       
@@ -432,7 +432,7 @@ test &amp;lt;- read_csv(&amp;quot;../../static/data/test.csv&amp;quot;)&lt;/code
 test &amp;lt;- test %&amp;gt;%
   mutate(Survived = NA)
 
-#Lets merge the two dataset together for data wrangling/cleaning
+#let&#39;s merge the two dataset together for data wrangling/cleaning
 merge_data &amp;lt;- rbind(train, test)
 
 #Checking if there are no duplicates
@@ -452,7 +452,7 @@ length(unique(merge_data$PassengerId)) == 891 + 418&lt;/code&gt;&lt;/pre&gt;
   scale_fill_discrete(name = &amp;#39;Survived&amp;#39;)+
   xlab(&amp;quot;Pclass&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/Titanic_Survival_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;LOoking at the Survived by Sibsp&lt;/p&gt;
+&lt;p&gt;Looking at the Survived by Sibsp&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;train %&amp;gt;%
   ggplot(aes(x = as.factor(SibSp), fill = as.factor(Survived)))+
   geom_bar()+
@@ -482,13 +482,13 @@ length(unique(merge_data$PassengerId)) == 891 + 418&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/Titanic_Survival_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;div id=&#34;data-understanding-and-data-cleaning&#34; class=&#34;section level6&#34;&gt;
 &lt;h6&gt;Data understanding and Data cleaning&lt;/h6&gt;
-&lt;p&gt;Lets group the age into bucket&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Lets convert some of the columns name into factors
+&lt;p&gt;let&#39;s group the age into bucket&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#let&#39;s convert some of the columns name into factors
 
 merge_data$Sex &amp;lt;- as.factor(merge_data$Sex)
 merge_data$Pclass &amp;lt;- as.factor(merge_data$Pclass)
 
-#First lets replace the missing values of age by the mean of the subgroup by pclass since it has no missing values 
+#First let&#39;s replace the missing values of age by the mean of the subgroup by pclass since it has no missing values 
 
 merge_data %&amp;gt;%
   filter(!is.na(Age)) %&amp;gt;%
@@ -504,7 +504,7 @@ merge_data %&amp;gt;%
 # 2                 30
 # 3                 25
 
-#now lets replace the missing age values
+#now let&#39;s replace the missing age values
 
 merge_data_missing_age &amp;lt;- merge_data %&amp;gt;%
                             filter(is.na(Age)) %&amp;gt;%
@@ -543,7 +543,7 @@ merge_data %&amp;gt;%
   scale_fill_discrete(name = &amp;#39;Survived&amp;#39;)+
   xlab(&amp;quot;Age Bucket&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/Titanic_Survival_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Lets extract the first letter from the Cabin&lt;/p&gt;
+&lt;p&gt;Let&#39;s extract the first letter from the Cabin&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;length(unique(merge_data$Cabin))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 187&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;merge_data$Cabin_Letter &amp;lt;- str_sub(merge_data$Cabin,1,1)
@@ -565,7 +565,7 @@ merge_data$Cabin_Available &amp;lt;- as.factor(ifelse(is.na(merge_data$Cabin),FA
 ## 1        1044       NA 3      Stor… male      0     0 3701      NA &amp;lt;NA&amp;gt; 
 ## # ... with 5 more variables: Embarked &amp;lt;chr&amp;gt;, Age &amp;lt;dbl&amp;gt;, Age_bucket &amp;lt;fct&amp;gt;,
 ## #   Cabin_Letter &amp;lt;chr&amp;gt;, Cabin_Available &amp;lt;fct&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#lets replace the fare by mean of Pclass = 3
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#let&#39;s replace the fare by mean of Pclass = 3
 
 merge_data[1044,]$Fare &amp;lt;- mean(subset(merge_data,Pclass==3)$Fare,na.rm=TRUE)
 
@@ -726,7 +726,7 @@ library(formattable)
 print(paste0(&amp;quot;The Accuracy for the Logistic Regression is: &amp;quot;, percent(logistic_accuracy)))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] &amp;quot;The Accuracy for the Logistic Regression is: 83.86%&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;div id=&#34;lets-use-the-caret-package-to-improvde-our-predictive-abilities-by-using-10-fold-cross-validation&#34; class=&#34;section level5&#34;&gt;
+&lt;div id=&#34;let&#39;s-use-the-caret-package-to-improvde-our-predictive-abilities-by-using-10-fold-cross-validation&#34; class=&#34;section level5&#34;&gt;
 &lt;h5&gt;Let’s use the Caret package to improve our predictive abilities by using 10-fold cross validation&lt;/h5&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;trainControl &amp;lt;- trainControl(method = &amp;quot;repeatedcv&amp;quot;, number = 10, repeats = 3)
 metric &amp;lt;- &amp;quot;Accuracy&amp;quot;&lt;/code&gt;&lt;/pre&gt;
@@ -801,10 +801,10 @@ summary(results)&lt;/code&gt;&lt;/pre&gt;
 ## NB                  0.4885496    0
 ## SVM                 0.7793696    0&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dotplot(results)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/Titanic_Survival_files/figure-html/unnamed-chunk-26-1.png&#34; width=&#34;672&#34; /&gt; From the plot above, we can see that SVm has a the highest accuracy&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/Titanic_Survival_files/figure-html/unnamed-chunk-26-1.png&#34; width=&#34;672&#34; /&gt; From the plot above, we can see that SVM has the highest accuracy&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;svm-algorithm-tuning&#34; class=&#34;section level5&#34;&gt;
-&lt;h5&gt;SVM Algorithm tuning&lt;/h5&gt;
+&lt;h5&gt;SVM Algorithm Tuning&lt;/h5&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;grid &amp;lt;- expand.grid(.sigma=c(0.005, 0.01, 0.015, 0.02), .C=seq(1, 10, by=1))
 
 set.seed(1234)
@@ -903,7 +903,7 @@ print(rf.fit)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;##     0   1 class.error
 ## 0 361  43   0.1064356
 ## 1  80 184   0.3030303&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Based on the random forest variable importance, lets only keep the following: Pclass + Sex + Age_bucket+ Fare_bucket Title + Ticketsize&lt;/p&gt;
+&lt;p&gt;Based on the random forest variable importance, let&#39;s only keep the following: Pclass + Sex + Age_bucket+ Fare_bucket Title + Ticketsize&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rf.fit2 &amp;lt;- randomForest(factor(Survived) ~Pclass + Sex + Fare_bucket + Cabin_Available + Ticketsize + Embarked + Title ,
                               data = train, nodesize=20)
 

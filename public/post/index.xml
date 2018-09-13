@@ -30,12 +30,12 @@ library(d3wordcloud) big_data_clean_2 &amp;lt;- read_csv(&amp;quot;../../static/
       
       <guid>/post/web-scraping-twitter/</guid>
       <description>I performed a sentiment analysis on each individual cryptocurrency using Twitter API to have a better understanding about the influence of social media on cryptocurrencies.
-library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra)  Built-funcrion for Web Scraping Analysis I built a function to do some web-scraping analysis in order to facilitate the extraction of Twitter data.
+library(twitteR) library(dplyr) library(tm) library(wordcloud) library(tidytext) library(tidyverse) library(sqldf) library(ggplot2) library(ggthemes) library(data.table) library(gridExtra)  Built-in Function for Web Scraping Analysis I built a function to do some web-scraping analysis in order to facilitate the extraction of Twitter data.
 setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_token_secret) twitter_scraping_data &amp;lt;- function(coin_name){ coin_data = twitteR::searchTwitter(paste0(&amp;quot;#&amp;quot;,coin_name,&amp;quot; -filter:retweets&amp;quot;), lang = &amp;quot;en&amp;quot;, n = 100, since = &#39;2017-08-01&#39;, until = as.</description>
     </item>
     
     <item>
-      <title>Titanic_Survival</title>
+      <title>Titanic Survival</title>
       <link>/post/titanic_survival/</link>
       <pubDate>Sat, 20 Jan 2018 00:00:00 +0000</pubDate>
       

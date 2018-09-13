@@ -64,7 +64,7 @@ library(gridExtra)
 
 ```
 
-##### Built-funcrion for Web Scraping Analysis
+##### Built-in Function for Web Scraping Analysis
 
 I built a function to do some web-scraping analysis in order to facilitate the extraction of Twitter data.
 ```{r, warning=FALSE, message= FALSE}
