@@ -15,7 +15,7 @@ weight = 60
 
 +++
 
-Those are the following graduate level courses taken in my Business Analytics program:
+Here are the following graduate level courses taken in my Business Analytics program:
 
 - Statistical Computing and Data Visualization
 - Applied Modern Statistical Learning Methods
@@ -25,3 +25,6 @@ Those are the following graduate level courses taken in my Business Analytics pr
 - Monte Carlo Simulation and Decision Models
 - Principle of Informatics
 - Database Management
+- Time Series Analysis
+- Fraud Analytics
+- Marketing Analytics
