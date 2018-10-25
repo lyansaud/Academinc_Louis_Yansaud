@@ -39,6 +39,6 @@ weight = 5
 
 # Biography
 
-I am a M.S. graduate in Business Analytics with an emphasis in data science from the University of Southern California, Marshall School of Business. My interets include Statistical Programming in R, Fraud Analytics, People Analytics and Healthcare Analytics. I am primarily focused on the application of statistical, computational, quantitative, econometric, and management tools to the informational flows for the purpose of addressing business needs. I am really interested in applying Big Data to create a high level of customer service every day with the ultimate goal of making people happy. 
+I am a M.S. graduate in Business Analytics with an emphasis in data science from the University of Southern California, Marshall School of Business. My interests include Statistical Programming in R, Fraud Analytics, People Analytics and Healthcare Analytics. I am primarily focused on the application of statistical, computational, quantitative, econometric, and management tools to the informational flows for the purpose of addressing business needs. I am really interested in applying Big Data to create a high level of customer service every day with the ultimate goal of making people happy. 
 
 My **<a href="#projects">projects</a>** and **<a href="#posts">posts</a>** include web scraping, data visualization, data cleaning, sentiment analysis, supervised and unsupervised machine learning.
